@@ -1,0 +1,9 @@
+# Export DeepSeek conversation
+Shared Conversation - DeepSeek.html
+Shared Conversation - DeepSeek_files/
+
+# Local cache & netlify
+.netlify/
+*.log
+Thumbs.db
+.DS_Store

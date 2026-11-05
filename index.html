@@ -7,7 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<title>MOVIE — Générateur Vidéo IA Multi-API</title>
+<title>MOVIE — Studio Vidéo & Photo IA Multi-API</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -19,50 +19,58 @@
 }
 body{font-family:var(--fs);background:var(--bg);color:var(--ink);min-height:100vh;padding:1rem 1rem 100px;font-size:14px;line-height:1.5;max-width:1200px;margin:0 auto;overflow-x:hidden}
 header{margin-bottom:1rem;text-align:center;padding:1rem 0 1.2rem;border-bottom:1px solid var(--border)}
-h1{font-size:1.8rem;font-weight:800;margin-bottom:.3rem;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.subtitle{font-size:.8rem;color:var(--dim);font-style:italic}
-.toast{position:fixed;top:1rem;left:50%;transform:translateX(-50%)translateY(-120px);background:var(--panel);color:var(--ink);border:1px solid var(--border);border-left:3px solid var(--acc);padding:.75rem 1.2rem;border-radius:var(--r);font-size:.8rem;z-index:1000;opacity:0;transition:.3s;max-width:90vw;text-align:center}
+h1{font-size:1.9rem;font-weight:800;margin-bottom:.3rem;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.02em}
+.subtitle{font-size:.82rem;color:var(--dim);font-style:italic}
+.toast{position:fixed;top:1rem;left:50%;transform:translateX(-50%)translateY(-120px);background:var(--panel);color:var(--ink);border:1px solid var(--border);border-left:3px solid var(--acc);padding:.75rem 1.2rem;border-radius:var(--r);font-size:.82rem;z-index:3000;opacity:0;transition:.3s;max-width:90vw;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,.6)}
 .toast.visible{transform:translateX(-50%)translateY(0);opacity:1}
 .toast.success{border-left-color:var(--ok)}.toast.error{border-left-color:var(--err)}.toast.warn{border-left-color:var(--warn)}
-.banner{background:var(--panel);border:1px solid var(--border);border-left:2px solid var(--acc);padding:.9rem 1rem;border-radius:var(--r);font-size:.78rem;color:var(--dim);margin-bottom:1rem;line-height:1.6}
+.banner{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--acc);padding:.9rem 1rem;border-radius:var(--r);font-size:.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6}
 .banner strong{color:var(--ink)}.banner .hl{color:var(--acc)}.banner .hl2{color:var(--acc2)}
 .panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.1rem;margin-bottom:.8rem}
 .panel.ok{box-shadow:inset 3px 0 0 var(--ok)}
-input[type=password],textarea{width:100%;padding:.75rem .9rem;border-radius:var(--r);border:1px solid var(--border);background:var(--bg2);color:var(--ink);font-family:var(--fm);font-size:.8rem;margin-bottom:.5rem}
-textarea{resize:vertical;min-height:70px;line-height:1.4}
-input:focus,textarea:focus{outline:none;border-color:var(--acc)}
-.btn{width:100%;padding:.8rem 1.2rem;border-radius:var(--r);border:1px solid var(--border);background:var(--bg2);color:var(--ink);font-size:.85rem;font-weight:600;letter-spacing:.08em;cursor:pointer;margin-bottom:.6rem;transition:.2s;font-family:inherit}
+input[type=text],input[type=password],textarea,select{width:100%;padding:.75rem .9rem;border-radius:var(--r);border:1px solid var(--border);background:var(--bg2);color:var(--ink);font-family:inherit;font-size:.82rem;margin-bottom:.5rem;transition:border-color .2s}
+textarea{resize:vertical;min-height:75px;line-height:1.45;font-family:var(--fm)}
+select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right .9rem center;background-size:1em;padding-right:2.4rem}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 2px rgba(74,108,247,.2)}
+.btn{width:100%;padding:.8rem 1.2rem;border-radius:var(--r);border:1px solid var(--border);background:var(--bg2);color:var(--ink);font-size:.85rem;font-weight:600;letter-spacing:.05em;cursor:pointer;margin-bottom:.6rem;transition:.2s;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:.4rem}
 .btn:hover:not(:disabled){background:var(--bg3);border-color:var(--acc)}
-.btn:disabled{opacity:.35;cursor:not-allowed}
-.btn-primary{border-color:var(--acc);background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(74,108,247,.15));color:var(--acc);font-size:1rem;padding:1.2rem;letter-spacing:.2em}
-.btn-primary:disabled{opacity:.5}
-.btn-stop{border-color:var(--err);color:var(--err);background:transparent;display:none}
-.btn-stop.visible{display:block}
-.btn-mini{width:auto;padding:.4rem .7rem;font-size:.68rem;letter-spacing:.08em;margin-bottom:0;display:inline-block}
-.status{font-size:.72rem;padding:.55rem .8rem;border-radius:var(--r);margin-bottom:.4rem;display:flex;align-items:center;gap:.5rem;background:var(--bg2);color:var(--dim);border:1px solid var(--border)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{border-color:var(--acc);background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(74,108,247,.25));color:#fff;font-size:1rem;padding:1.1rem;letter-spacing:.1em;box-shadow:0 4px 15px rgba(74,108,247,.2)}
+.btn-primary:hover:not(:disabled){background:linear-gradient(135deg,rgba(124,58,237,.5),rgba(74,108,247,.45))}
+.btn-mini{width:auto;padding:.45rem .8rem;font-size:.72rem;letter-spacing:.05em;margin-bottom:0}
+.btn-stop{border-color:var(--err);color:var(--err);background:rgba(239,68,68,.1);display:none}
+.btn-stop.visible{display:inline-flex}
+.status{font-size:.75rem;padding:.55rem .8rem;border-radius:var(--r);margin-bottom:.4rem;display:flex;align-items:center;gap:.5rem;background:var(--bg2);color:var(--dim);border:1px solid var(--border)}
 .status.ok{background:rgba(16,185,85,.08);color:var(--ok);border-color:rgba(16,185,85,.3)}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--faint);flex-shrink:0}
-.status.ok .dot{background:var(--ok);box-shadow:0 0 8px var(--ok)}
-.hint{font-size:.7rem;color:var(--dim);margin-top:.4rem}
-.hint a{color:var(--acc);text-decoration:none}
+.status.warn{background:rgba(245,158,11,.08);color:var(--warn);border-color:rgba(245,158,11,.3)}
+.status.error{background:rgba(239,68,68,.08);color:var(--err);border-color:rgba(239,68,68,.3)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--faint);flex-shrink:0}
+.dot.ok{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.dot.warn{background:var(--warn);box-shadow:0 0 8px var(--warn)}
+.dot.error{background:var(--err);box-shadow:0 0 8px var(--err)}
+.dot.polling{background:var(--acc);box-shadow:0 0 8px var(--acc);animation:pulse 1s infinite alternate}
+@keyframes pulse{from{opacity:.4}to{opacity:1}}
+.hint{font-size:.72rem;color:var(--dim);margin-top:.4rem;line-height:1.4}
+.hint a{color:var(--acc);text-decoration:none;font-weight:600}
+.hint a:hover{text-decoration:underline}
 .keys-list{margin-top:.6rem}
-.key-row{padding:.35rem .6rem;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:.3rem;display:flex;justify-content:space-between;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.7rem}
+.key-row{padding:.4rem .7rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:.3rem;display:flex;justify-content:space-between;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.72rem}
 .key-row .key-id{color:var(--acc);font-weight:600}
-.key-row .key-state{font-size:.6rem;padding:.12rem .45rem;border-radius:2px;background:rgba(16,185,85,.15);color:var(--ok);border:1px solid rgba(16,185,85,.3);letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.key-row .key-state{font-size:.62rem;padding:.15rem .5rem;border-radius:4px;background:rgba(16,185,85,.15);color:var(--ok);border:1px solid rgba(16,185,85,.3);letter-spacing:.06em;text-transform:uppercase;font-weight:700}
 .key-row .key-state.cool{background:rgba(245,158,11,.15);color:var(--warn);border-color:rgba(245,158,11,.3)}
 .key-row .key-state.dead{background:rgba(239,68,68,.15);color:var(--err);border-color:rgba(239,68,68,.3)}
 .section{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);margin-bottom:.8rem;overflow:hidden}
 .section.hidden{display:none!important}
-.section-header{padding:.85rem 1rem;cursor:pointer;user-select:none;display:flex;justify-content:space-between;align-items:center}
-.section-title{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink);font-weight:600;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
-.badge{display:inline-block;padding:.12rem .5rem;background:transparent;color:var(--acc);border:1px solid var(--border);border-radius:2px;font-size:.6rem;letter-spacing:.1em;font-weight:600}
+.section-header{padding:.9rem 1.1rem;cursor:pointer;user-select:none;display:flex;justify-content:space-between;align-items:center}
+.section-title{font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);font-weight:700;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.badge{display:inline-block;padding:.15rem .5rem;background:transparent;color:var(--acc);border:1px solid var(--border);border-radius:4px;font-size:.62rem;letter-spacing:.08em;font-weight:700}
 .badge.ok{color:var(--ok);border-color:rgba(16,185,85,.4)}
 .badge.purple{color:var(--acc2);border-color:rgba(124,58,237,.4)}
-.chevron{font-size:.65rem;color:var(--faint);transition:transform .3s}
+.chevron{font-size:.7rem;color:var(--faint);transition:transform .3s}
 .section.open .chevron{transform:rotate(180deg);color:var(--acc)}
 .section-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
 .section.open .section-body{max-height:24000px}
-.section-content{padding:0 1rem 1rem}
+.section-content{padding:0 1.1rem 1.1rem}
 .parties-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.5rem;margin-top:.5rem}
 .party-card{padding:.7rem .8rem;border-radius:8px;border:1px solid var(--border);background:var(--bg2);cursor:pointer;transition:.2s;text-align:center}
 .party-card:hover{border-color:var(--faint)}
@@ -80,7 +88,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--acc)}
 .party-news-block{margin-bottom:.8rem}
 .party-news-header{padding:.5rem .75rem;background:rgba(74,108,247,.06);border:1px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;font-size:.74rem;font-weight:600;letter-spacing:.05em}
 .script-view{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;margin-top:.5rem;font-size:.82rem;line-height:1.6;color:var(--ink);max-height:520px;overflow-y:auto}
-.script-title{font-size:1rem;font-weight:500;color:var(--acc);margin-bottom:.3rem}
+.script-title{font-size:1rem;font-weight:600;color:var(--acc);margin-bottom:.3rem}
 .script-logline{font-style:italic;color:var(--dim);margin-bottom:.9rem;font-size:.8rem}
 .script-meta{font-size:.7rem;color:var(--faint);font-family:var(--fm);margin-bottom:.9rem;padding-bottom:.7rem;border-bottom:1px dashed var(--border);line-height:1.6}
 .script-scene{margin-bottom:1rem;padding-left:.8rem;border-left:2px solid var(--border)}
@@ -88,7 +96,6 @@ input:focus,textarea:focus{outline:none;border-color:var(--acc)}
 .script-scene .sc-line{margin-bottom:.2rem;font-size:.8rem}
 .script-scene .sc-label{display:inline-block;min-width:78px;color:var(--faint);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em}
 .script-scene .sc-dialogue{color:#f0d78a;font-style:italic}
-.script-scene .sc-overlay{color:#e8a87c;font-family:var(--fm);font-size:.76rem}
 .script-scene .sc-character{color:#b8d8e8}
 .script-scene .sc-shots{margin-top:.3rem;padding:.35rem .55rem;background:rgba(255,255,255,.02);border-radius:4px;font-size:.74rem;color:var(--dim);font-family:var(--fm)}
 .videos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem;margin-top:.6rem}
@@ -105,17 +112,17 @@ input:focus,textarea:focus{outline:none;border-color:var(--acc)}
 .scene-download:hover{background:rgba(74,108,247,.08);border-color:var(--acc)}
 .spinner-mini{width:12px;height:12px;border:2px solid rgba(74,108,247,.2);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-.player-overlay{position:fixed;inset:0;background:#000;z-index:2000;display:none;align-items:center;justify-content:center;cursor:pointer}
+.player-overlay{position:fixed;inset:0;background:#000;z-index:4000;display:none;align-items:center;justify-content:center;cursor:pointer}
 .player-overlay.visible{display:flex}
-#player-canvas{display:block;max-width:100vw;max-height:100vh;background:#000}
-.player-hint{position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.55);font-size:.72rem;font-family:var(--fm);letter-spacing:.12em;text-transform:uppercase;pointer-events:none;background:rgba(0,0,0,.4);padding:.3rem .7rem;border-radius:4px}
+#playerCanvas{display:block;max-width:100vw;max-height:100vh;background:#000}
+.player-hint{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.7);font-size:.75rem;font-family:var(--fm);letter-spacing:.12em;text-transform:uppercase;pointer-events:none;background:rgba(0,0,0,.6);padding:.4rem .9rem;border-radius:6px;border:1px solid rgba(255,255,255,.1)}
 .player-controls{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-top:.5rem}
 .player-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem}
 .player-row .btn{margin-bottom:0;flex:1;min-width:140px}
-.status-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);color:var(--ink);padding:.75rem 1rem;font-size:.76rem;display:flex;align-items:center;gap:.6rem;transform:translateY(100%);transition:transform .35s;z-index:100;font-family:var(--fm)}
+.status-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);color:var(--ink);padding:.75rem 1rem;font-size:.76rem;display:flex;align-items:center;gap:.6rem;transform:translateY(100%);transition:transform .35s;z-index:200;font-family:var(--fm)}
 .status-bar.visible{transform:translateY(0)}
-.spinner{width:11px;height:11px;border:2px solid rgba(74,108,247,.2);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
-.debug-panel{position:fixed;bottom:0;left:0;right:0;height:210px;background:#05070c;border-top:2px solid var(--acc);z-index:200;display:flex;flex-direction:column;font-family:var(--fm);transition:height .3s ease}
+.spinner{width:16px;height:16px;border:2px solid rgba(74,108,247,.2);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+.debug-panel{position:fixed;bottom:0;left:0;right:0;height:210px;background:#05070c;border-top:2px solid var(--acc);z-index:300;display:flex;flex-direction:column;font-family:var(--fm);transition:height .3s ease}
 .debug-panel.collapsed{height:40px}
 .debug-header{display:flex;justify-content:space-between;align-items:center;padding:.35rem .65rem;background:linear-gradient(90deg,#0f121e,#161e30);border-bottom:1px solid var(--border);flex-shrink:0;user-select:none}
 .debug-tabs{display:flex;gap:.25rem}
@@ -130,249 +137,275 @@ input:focus,textarea:focus{outline:none;border-color:var(--acc)}
 .journal-body .j-entry{display:flex;gap:.5rem;padding:.2rem 0;align-items:flex-start;border-bottom:1px dashed rgba(255,255,255,.04)}
 .journal-body .j-entry:last-child{border-bottom:none}
 .journal-body .j-time{font-family:var(--fm);font-size:.66rem;color:var(--faint);flex-shrink:0;min-width:58px;padding-top:.1rem}
-.journal-body .j-icon{flex-shrink:0}
 .journal-body .j-msg{color:#d8d8e0;flex:1;word-break:break-word}
 .journal-body .j-entry.highlight .j-msg{color:var(--acc);font-weight:600}
 .journal-body .j-entry.success .j-msg{color:var(--ok)}
 .journal-body .j-entry.warn .j-msg{color:var(--warn)}
 .journal-body .j-entry.error .j-msg{color:var(--err)}
-.debug-entry{margin-bottom:.25rem;padding:.2rem .4rem;border-left:2px solid transparent;border-radius:2px;word-break:break-word}
-.debug-entry.info{border-left-color:var(--faint)}
-.debug-entry.success{border-left-color:var(--ok);background:rgba(16,185,85,.04)}
-.debug-entry.warn{border-left-color:var(--warn);background:rgba(245,158,11,.04)}
-.debug-entry.error{border-left-color:var(--err);background:rgba(239,68,68,.06);color:#f0a0a0}
-.debug-entry.api{border-left-color:var(--acc)}
-.debug-time{color:var(--faint);margin-right:.5rem;font-size:.64rem}
-.debug-cat{color:var(--acc);font-weight:600;margin-right:.35rem;font-size:.64rem}
-.debug-msg{color:#d8d8e0}
-.debug-data{margin-top:.25rem;padding:.35rem .45rem;background:#0a0e1a;border:1px solid var(--border);border-radius:3px;font-size:.66rem;color:#a8d8b0;max-height:140px;overflow:auto;white-space:pre-wrap;word-break:break-all;line-height:1.35}
 .hidden{display:none!important}
 .voice-toggle{display:flex;align-items:center;gap:.4rem;margin-top:.5rem;font-size:.74rem;color:var(--dim)}
 .voice-toggle input{width:auto;margin:0;accent-color:var(--acc)}
 .launcher{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:.8rem}
 .launcher-row{display:flex;gap:.6rem;flex-wrap:wrap}
 .launcher-row .btn{margin-bottom:0;flex:1;min-width:160px}
-.mode-toggle{display:flex;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:.25rem;margin-bottom:1rem}
-.mode-btn{flex:1;padding:.6rem;border:none;background:transparent;color:var(--dim);font-size:.85rem;font-weight:600;cursor:pointer;border-radius:calc(var(--r)-2px);transition:.2s}
-.mode-btn.active{background:var(--acc);color:#fff}
-.upload-area{border:2px dashed var(--border);border-radius:var(--r);padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:.2s;background:var(--bg2)}
+.mode-toggle{display:flex;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:.3rem;margin-bottom:1rem;gap:.3rem}
+.mode-btn{flex:1;padding:.7rem;border:none;background:transparent;color:var(--dim);font-size:.85rem;font-weight:700;cursor:pointer;border-radius:calc(var(--r)-3px);transition:.2s}
+.mode-btn.active{background:var(--acc);color:#fff;box-shadow:0 2px 8px rgba(74,108,247,.3)}
+.upload-area{border:2px dashed var(--border);border-radius:var(--r);padding:1.4rem 1rem;text-align:center;cursor:pointer;transition:.2s;background:var(--bg2)}
 .upload-area:hover{border-color:var(--acc);background:rgba(74,108,247,.05)}
 .upload-area.drag-over{border-color:var(--acc);background:rgba(74,108,247,.1)}
-.upload-icon{font-size:2rem;color:var(--dim);margin-bottom:.5rem}
-.upload-text{color:var(--dim);font-size:.875rem}
+.upload-icon{font-size:2rem;color:var(--dim);margin-bottom:.3rem}
+.upload-text{color:var(--dim);font-size:.82rem}
 .file-input-hidden{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10}
 .file-overlay{position:relative;display:block;width:100%}
-.single-preview{width:100%;max-width:320px;height:200px;border-radius:var(--r);object-fit:cover;border:1px solid var(--border);margin:0 auto;display:block;background:#000}
-.images-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:.5rem;margin-top:.75rem}
-.image-card{position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:#000;aspect-ratio:9/16}
-.image-card img{width:100%;height:100%;object-fit:cover;display:block}
-.image-card .remove-btn{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);color:#fff;border:none;width:24px;height:24px;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
-.queue{margin-top:1rem}
-.queue-summary{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.7rem .9rem;margin-bottom:.6rem;font-size:.78rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.4rem}
-.queue-item{display:flex;align-items:center;gap:.8rem;padding:.7rem .8rem;border-radius:8px;border:1px solid var(--border);margin-bottom:.4rem;background:var(--bg2);font-size:.82rem}
-.queue-item.done{border-color:var(--ok)}.queue-item.error{border-color:var(--err)}.queue-item.processing{border-color:var(--acc)}
-.gallery{margin-top:1.5rem}
-.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.8rem}
-.gallery-item{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);background:#000}
-.gallery-item video{width:100%;display:block;aspect-ratio:9/16;object-fit:cover}
-.gallery-item .g-actions{padding:.5rem;background:var(--panel);display:flex;gap:.5rem;justify-content:center}
-.video-container{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:var(--r);overflow:hidden;margin:0 auto;max-width:640px;box-shadow:0 10px 25px -5px rgba(0,0,0,.5)}
+.single-preview-wrap{position:relative;width:100%;max-width:480px;margin:0 auto;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);background:#000}
+.single-preview{width:100%;max-height:300px;object-fit:contain;display:block}
+.preview-actions{display:flex;gap:.5rem;padding:.5rem;background:var(--bg2);justify-content:center}
+.video-container{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:var(--r);overflow:hidden;margin:0 auto;max-width:720px;box-shadow:0 10px 30px rgba(0,0,0,.6);margin-top:1rem}
 .video-container video{width:100%;height:100%;object-fit:cover;display:block}
-.video-locked-badge{position:absolute;top:.75rem;right:.75rem;background:rgba(16,185,85,.9);color:#fff;padding:.25rem .75rem;border-radius:999px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 2px 4px rgba(0,0,0,.3)}
-.loading-overlay{position:absolute;inset:0;background:rgba(10,14,26,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;border-radius:var(--r)}
-.spinner{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:1rem}
-.timer{font-family:var(--fm);font-size:1.125rem;color:var(--acc);font-weight:700}
-.auto-style-hint{font-size:.75rem;color:var(--dim);margin-top:.5rem;padding:.5rem;background:var(--bg2);border-radius:8px;border:1px solid var(--border)}
-.pwa-install{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;z-index:200;box-shadow:0 10px 25px -5px rgba(0,0,0,.5);display:none}
+.video-locked-badge{position:absolute;top:.75rem;right:.75rem;background:rgba(16,185,85,.9);color:#fff;padding:.3rem .8rem;border-radius:999px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.loading-overlay{position:absolute;inset:0;background:rgba(10,14,26,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;border-radius:var(--r)}
+.spinner-lg{width:46px;height:46px;border:3px solid var(--border);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:.8rem}
+.timer{font-family:var(--fm);font-size:1.15rem;color:var(--acc);font-weight:700}
+.auto-style-hint{font-size:.75rem;color:var(--dim);margin-top:.5rem;padding:.5rem .8rem;background:var(--bg2);border-radius:8px;border:1px solid var(--border)}
+.pwa-install{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;z-index:500;box-shadow:0 10px 25px rgba(0,0,0,.5);display:none}
 .pwa-install.visible{display:flex}
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-@media(max-width:480px){h1{font-size:1.4rem}.videos-grid{grid-template-columns:1fr}body{padding-bottom:110px}.parties-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){h1{font-size:1.45rem}.videos-grid{grid-template-columns:1fr}body{padding-bottom:120px}.parties-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 
 <header>
 <h1>MOVIE</h1>
-<p class="subtitle">Générateur Vidéo IA Multi-API · Anti-perte iOS · Pool multi-clés · Chatons Kung-Fu</p>
+<p class="subtitle">Studio Vidéo & Photo IA · Moteur Anti-Perte · Mode JT Chatons Kung-Fu</p>
 </header>
 
 <div class="banner">
-<strong>MOVIE — Génération vidéo IA tout-en-un.</strong> Uploadez une image, choisissez un style, générez. Ou lancez un <span class="hl">JT Multi-Partis</span> avec chatons kung-fu style Wes Anderson sur <span class="hl2">N clés API en parallèle</span>.
+<strong>MOVIE — Génération vidéo & photo IA tout-en-un.</strong> Créez votre première photo avec <span class="hl">Agnes Image</span> ou animez n'importe quelle photo en vidéo avec styles artistiques. Vous pouvez aussi lancer le <span class="hl2">JT politique satirique</span> en parallèle.
 </div>
 
 <!-- PWA Install -->
 <div class="pwa-install" id="pwaInstall">
-<span>Installer MOVIE</span>
+<span>Installer MOVIE sur l'écran d'accueil</span>
 <button class="btn btn-primary btn-mini" id="btnPwaInstall">Installer</button>
 </div>
 
 <!-- API Status -->
-<div class="status" id="apiStatus"><span class="dot"></span><span id="statusText">Système prêt</span></div>
+<div class="status" id="apiStatus"><span class="dot" id="statusDot"></span><span id="statusText">Système prêt</span></div>
 
 <!-- Retry Banner (Anti-perte) -->
 <div class="panel hidden" id="retryBanner" style="border-left-color:var(--warn);background:rgba(245,158,11,.08);">
-<p style="color:var(--dim);font-size:.8rem;margin-bottom:.6rem;">Une génération précédente a été détectée (anti-perte activé).</p>
-<button class="btn btn-primary btn-mini" id="btnRetry">Récupérer la dernière vidéo</button>
+<p style="color:var(--ink);font-size:.82rem;margin-bottom:.5rem;font-weight:600;">🔄 Une génération vidéo précédente est en cours ou disponible (Anti-perte activé).</p>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+  <button class="btn btn-primary btn-mini" id="btnRetry">Récupérer la vidéo</button>
+  <button class="btn btn-mini" id="btnDismissRetry" style="color:var(--dim);">Ignorer</button>
+</div>
 </div>
 
-<!-- API Keys -->
+<!-- Unified API Keys Panel -->
 <div class="panel" id="api-panel">
-<label style="display:block;font-size:.7rem;color:var(--dim);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.12em;font-weight:600;">Clés API Agnes — une par ligne (chaque clé = 1 worker parallèle)</label>
-<textarea id="api-keys-input" placeholder="sk-xxxxx&#10;sk-yyyyy" rows="3" spellcheck="false" autocomplete="off"></textarea>
-<button type="button" class="btn" id="api-save-btn">Enregistrer les clés</button>
-<div class="status" id="api-status-line"><span class="dot"></span><span id="api-status-text">Aucune clé API enregistrée</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
+  <label for="api-keys-input" style="font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;font-weight:700;">
+    Clé(s) API Agnes (1 clé = 1 worker, plusieurs clés = parallélisation)
+  </label>
+  <span class="badge ok" id="apiKeyBadge">0 clé</span>
+</div>
+<textarea id="api-keys-input" placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx&#10;(Collez votre clé API ici)" rows="2" spellcheck="false" autocomplete="off"></textarea>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+  <button type="button" class="btn btn-primary" id="api-save-btn" style="flex:2;margin-bottom:0;padding:.65rem 1rem;font-size:.82rem;">💾 Enregistrer la clé</button>
+  <button type="button" class="btn" id="api-clear-btn" style="flex:1;margin-bottom:0;padding:.65rem 1rem;font-size:.82rem;color:var(--err);border-color:rgba(239,68,68,.3);">Effacer</button>
+</div>
+<div class="status" id="api-status-line" style="margin-top:.6rem;"><span class="dot" id="apiKeyDot"></span><span id="api-status-text">Aucune clé API enregistrée</span></div>
 <div class="keys-list" id="api-keys-status"></div>
-<div class="hint">Clés gratuites sur <a href="https://platform.agnes-ai.com" target="_blank">platform.agnes-ai.com</a> · N clés = N vidéos en parallèle</div>
+<div class="hint">Obtenez votre clé sur <a href="https://platform.agnes-ai.com" target="_blank" rel="noopener">platform.agnes-ai.com</a> · Stockée localement et de manière sécurisée dans votre navigateur.</div>
 </div>
 
 <!-- Mode Toggle -->
 <div class="mode-toggle">
-<button class="mode-btn active" id="modeMovie" data-mode="movie">MOVIE — Vidéo simple</button>
-<button class="mode-btn" id="modeJT" data-mode="jt">JT Multi-Partis</button>
+<button class="mode-btn active" id="modeMovie" data-mode="movie">🎬 Mode MOVIE — Photo & Vidéo</button>
+<button class="mode-btn" id="modeJT" data-mode="jt">🗳️ Mode JT Multi-Partis</button>
 </div>
 
-<!-- MOVIE Mode: Simple Video -->
-<div class="section" id="sectionMovie">
-<div class="section-header open"><span class="section-title">🎬 MOVIE — Génération vidéo</span></div>
+<!-- MOVIE Mode: Photo & Simple Video -->
+<div class="section open" id="sectionMovie">
+<div class="section-header"><span class="section-title">🎬 Studio MOVIE — Création Photo & Vidéo</span></div>
 <div class="section-body">
 <div class="section-content">
-<div class="form-group">
-<label class="form-label" style="display:block;font-size:.8rem;color:var(--dim);margin-bottom:.4rem;font-weight:600;">Image d'entrée</label>
-<div class="file-overlay">
-<div class="upload-area" id="uploadAreaMovie">
-<div class="upload-icon">📷</div>
-<div class="upload-text">Cliquez pour uploader une image (Safari iOS compatible)</div>
-<input type="file" id="imageInputMovie" accept="image/*" class="file-input-hidden" capture="environment">
+
+<!-- Sub-section: Generate Photo First -->
+<div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:1rem;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+    <strong style="color:var(--acc);font-size:.85rem;">🎨 1. Générer une Photo IA (Agnes Image)</strong>
+    <span class="badge purple">Text-to-Image</span>
+  </div>
+  <p style="font-size:.76rem;color:var(--dim);margin-bottom:.6rem;">Créez votre première photo avec l'IA. Elle sera prête à être téléchargée ou directement animée en vidéo.</p>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+    <input type="text" id="photoPromptInput" placeholder="Ex: Cute samurai cat wearing red retro helmet, 35mm film still, Wes Anderson style" style="flex:3;min-width:220px;margin-bottom:0;">
+    <button type="button" class="btn btn-primary" id="btnGeneratePhoto" style="flex:1;min-width:140px;margin-bottom:0;padding:.7rem 1rem;font-size:.82rem;">Générer photo</button>
+  </div>
+  <div id="photoStatusLine" class="status hidden" style="margin-top:.6rem;"><span class="spinner-mini"></span><span id="photoStatusText">Génération en cours…</span></div>
 </div>
+
+<!-- Sub-section: Image Input / Preview -->
+<div class="form-group" style="margin-bottom:1rem;">
+  <label style="display:block;font-size:.8rem;color:var(--dim);margin-bottom:.4rem;font-weight:600;">Image source (Upload ou Photo générée ci-dessus)</label>
+  <div class="file-overlay">
+    <div class="upload-area" id="uploadAreaMovie">
+      <div class="upload-icon">📷</div>
+      <div class="upload-text">Cliquez ou glissez une image ici (PNG, JPG, WebP)</div>
+      <input type="file" id="imageInputMovie" accept="image/*" class="file-input-hidden">
+    </div>
+  </div>
 </div>
+
+<div id="previewContainer" class="hidden" style="margin-bottom:1rem;">
+  <div class="single-preview-wrap">
+    <img id="imagePreviewMovie" class="single-preview" alt="Preview">
+    <div class="preview-actions">
+      <button type="button" class="btn btn-mini" id="btnDownloadPhoto">⬇ Télécharger la photo</button>
+      <button type="button" class="btn btn-mini" id="btnRemovePhoto" style="color:var(--err);">✕ Retirer</button>
+    </div>
+  </div>
+  <div class="auto-style-hint" id="autoStyleHint"><strong>Analyse visuelle :</strong> <span id="autoStyleText">Prêt.</span></div>
 </div>
-<img id="imagePreviewMovie" class="single-preview hidden" alt="Preview">
-<div class="auto-style-hint" id="autoStyleHint"><strong>Analyse automatique :</strong> <span id="autoStyleText">Uploadez une image pour voir le style suggéré.</span></div>
+
+<!-- Prompt Video -->
 <div class="form-group" style="margin-top:.8rem;">
-<label class="form-label" style="display:block;font-size:.8rem;color:var(--dim);margin-bottom:.4rem;font-weight:600;">Prompt (anglais)</label>
-<textarea id="promptMovie" placeholder="Décrivez votre vidéo..."></textarea>
+  <label for="promptMovie" style="display:block;font-size:.8rem;color:var(--dim);margin-bottom:.4rem;font-weight:600;">2. Prompt d'animation vidéo</label>
+  <textarea id="promptMovie" placeholder="Ex: The kitten performs smooth kung-fu moves, camera slowly dollies in, cinematic lighting, 4k..."></textarea>
 </div>
+
+<!-- Style Selector -->
 <div class="form-group" style="margin-top:.8rem;">
-<label class="form-label" style="display:block;font-size:.8rem;color:var(--dim);margin-bottom:.4rem;font-weight:600;">Style</label>
-<select id="styleMovie">
-<option value="custom">Personnalisé</option>
-<option value="naruto">Naruto</option>
-<option value="dbz">Dragon Ball Z</option>
-<option value="demonslayer">Demon Slayer</option>
-<option value="jujutsu">Jujutsu Kaisen</option>
-<option value="onepiece">One Piece</option>
-<option value="ghibli">Ghibli</option>
-<option value="90s">Années 90</option>
-<option value="cinematic">Cinématique</option>
-<option value="cyberpunk">Cyberpunk</option>
-<option value="simpson">Les Simpson</option>
-<option value="pixar">Pixar</option>
-</select>
+  <label for="styleMovie" style="display:block;font-size:.8rem;color:var(--dim);margin-bottom:.4rem;font-weight:600;">Style cinématographique</label>
+  <select id="styleMovie">
+    <option value="cinematic" selected>Cinématique 35mm (Rendu film pro)</option>
+    <option value="custom">Personnalisé (Prompt brut uniquement)</option>
+    <option value="ghibli">Studio Ghibli (Aquarelle poétique)</option>
+    <option value="cyberpunk">Cyberpunk Néon (Furturiste contrasté)</option>
+    <option value="pixar">3D Animation Pixar / Disney</option>
+    <option value="90s">Rétro Anime Années 90 (Grain VHS)</option>
+    <option value="naruto">Naruto (Action anime dynamique)</option>
+    <option value="dbz">Dragon Ball Z (Shonen intense)</option>
+    <option value="demonslayer">Demon Slayer (Effets visuels Ufotable)</option>
+    <option value="jujutsu">Jujutsu Kaisen (Gritty sombre MAPPA)</option>
+    <option value="onepiece">One Piece (Expressif et coloré)</option>
+    <option value="simpson">Les Simpson (Cartoon)</option>
+  </select>
 </div>
+
+<!-- Duration Selector -->
 <div class="form-group" style="margin-top:.8rem;">
-<label class="form-label" style="display:block;font-size:.8rem;color:var(--dim);margin-bottom:.4rem;font-weight:600;">Durée</label>
-<select id="durationMovie">
-<option value="153" selected>6,4 secondes (153 frames)</option>
-<option value="121">5 secondes (121 frames)</option>
-<option value="241">10 secondes (241 frames)</option>
-</select>
+  <label for="durationMovie" style="display:block;font-size:.8rem;color:var(--dim);margin-bottom:.4rem;font-weight:600;">Durée de la vidéo</label>
+  <select id="durationMovie">
+    <option value="153" selected>6,4 secondes (153 frames à 24fps) — Recommandé</option>
+    <option value="121">5,0 secondes (121 frames)</option>
+    <option value="241">10,0 secondes (241 frames)</option>
+  </select>
 </div>
-<button class="btn btn-primary" id="btnGenerateMovie">Générer la vidéo</button>
+
+<button class="btn btn-primary" id="btnGenerateMovie" style="margin-top:1rem;" disabled>▶ Générer la vidéo</button>
+
+<!-- Video Output Player -->
 <div class="video-container hidden" id="videoContainerMovie">
-<video id="videoPlayerMovie" controls playsinline webkit-playsinline poster=""></video>
-<div class="loading-overlay hidden" id="loadingMovie">
-<div class="spinner"></div><div class="timer" id="elapsedMovie">00:00</div>
-<div style="color:var(--dim);font-size:.75rem;margin-top:.25rem;">Polling API en cours...</div>
+  <video id="videoPlayerMovie" controls playsinline webkit-playsinline></video>
+  <div class="loading-overlay hidden" id="loadingMovie">
+    <div class="spinner-lg"></div>
+    <div class="timer" id="elapsedMovie">00:00</div>
+    <div style="color:var(--dim);font-size:.78rem;margin-top:.35rem;" id="loadingMovieMsg">Calcul et rendu du modèle IA…</div>
+  </div>
+  <div class="video-locked-badge hidden" id="lockedBadgeMovie">VERROUILLÉ — ANTI-PERTE</div>
 </div>
-<div class="video-locked-badge" id="lockedBadgeMovie">VERROUILLÉ</div>
+
+<div class="video-actions hidden" id="videoActionsMovie" style="margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap;">
+  <button class="btn btn-primary btn-mini" id="btnDownloadMovie" style="flex:1;">⬇ Télécharger la vidéo MP4</button>
+  <button class="btn btn-mini" id="btnNewGenMovie" style="flex:1;">Nouvelle génération</button>
 </div>
-<div class="video-actions" style="margin-top:.6rem;display:flex;gap:.5rem;">
-<button class="btn btn-primary btn-mini" id="btnDownloadMovie" disabled>Télécharger</button>
-<button class="btn btn-danger btn-mini" id="btnNewGenMovie">Nouvelle génération</button>
-</div>
+
 </div></div></div>
 
 <!-- JT Mode: Multi-Partis -->
 <div class="section hidden" id="sectionJT">
 <div class="section-header" data-toggle="section-parties-jt">
-<span class="section-title">🗳️ 1 · Partis politiques <span class="badge" id="partiesCountJT">0 sélectionné</span></span>
-<span class="chevron">▼</span>
+  <span class="section-title">🗳️ 1 · Partis politiques <span class="badge" id="partiesCountJT">0 sélectionné</span></span>
+  <span class="chevron">▼</span>
 </div>
 <div class="section-body"><div class="section-content">
-<div class="parties-grid" id="partiesGridJT"></div>
+  <div class="parties-grid" id="partiesGridJT"></div>
 </div></div></div>
 
 <div class="section hidden" id="sectionNewsJT">
 <div class="section-header" data-toggle="section-news-jt">
-<span class="section-title">📰 2 · Actualités par parti <span class="badge" id="newsBadgeJT">—</span></span>
-<span class="chevron">▼</span>
+  <span class="section-title">📰 2 · Actualités par parti <span class="badge" id="newsBadgeJT">—</span></span>
+  <span class="chevron">▼</span>
 </div>
 <div class="section-body"><div class="section-content">
-<div id="newsContainerJT"></div>
-<button type="button" class="btn btn-mini" id="refreshNewsJT" style="margin-top:.5rem;">🔄 Recharger les news</button>
+  <div id="newsContainerJT"></div>
+  <button type="button" class="btn btn-mini" id="refreshNewsJT" style="margin-top:.5rem;">🔄 Recharger les flux RSS</button>
 </div></div></div>
 
 <div class="section hidden" id="sectionScriptJT">
 <div class="section-header" data-toggle="section-script-jt">
-<span class="section-title">📜 3 · Scénario du JT <span class="badge" id="scriptBadgeJT">—</span></span>
-<span class="chevron">▼</span>
+  <span class="section-title">📜 3 · Scénario cinématographique <span class="badge" id="scriptBadgeJT">—</span></span>
+  <span class="chevron">▼</span>
 </div>
 <div class="section-body"><div class="section-content">
-<div class="script-view" id="scriptViewJT">Le scénario apparaîtra ici…</div>
+  <div class="script-view" id="scriptViewJT">Le scénario apparaîtra ici…</div>
 </div></div></div>
 
 <div class="section hidden" id="sectionVideosJT">
 <div class="section-header" data-toggle="section-videos-jt">
-<span class="section-title">🎞️ 4 · Séquences vidéo <span class="badge" id="videosCountJT">0</span></span>
-<span class="chevron">▼</span>
+  <span class="section-title">🎞️ 4 · Séquences vidéo <span class="badge" id="videosCountJT">0</span></span>
+  <span class="chevron">▼</span>
 </div>
 <div class="section-body"><div class="section-content">
-<div class="videos-grid" id="videosGridJT"></div>
+  <div class="videos-grid" id="videosGridJT"></div>
 </div></div></div>
 
 <div class="section hidden" id="sectionPlayerJT">
 <div class="section-header" data-toggle="section-player-jt">
-<span class="section-title">▶ 5 · Diffusion du JT <span class="badge" id="playerBadgeJT">0</span></span>
-<span class="chevron">▼</span>
+  <span class="section-title">▶ 5 · Diffusion du JT <span class="badge" id="playerBadgeJT">0</span></span>
+  <span class="chevron">▼</span>
 </div>
 <div class="section-body"><div class="section-content">
-<div class="player-controls">
-<div class="player-row">
-<button type="button" class="btn" id="playFilmJT" disabled>▶ Diffuser le JT</button>
-<button type="button" class="btn" id="replayJT" disabled>🔁 Rejouer</button>
-</div>
-<div class="voice-toggle">
-<input type="checkbox" id="voiceToggleJT" checked>
-<label for="voiceToggleJT">Narration vocale française</label>
-</div>
-</div>
-<div class="hint">Lecture séquentielle avec incrustations françaises et voix off. Échap ou clic pour quitter.</div>
+  <div class="player-controls">
+    <div class="player-row">
+      <button type="button" class="btn btn-primary" id="playFilmJT" disabled>▶ Diffuser le JT</button>
+      <button type="button" class="btn" id="replayJT" disabled>🔁 Rejouer</button>
+    </div>
+    <div class="voice-toggle">
+      <input type="checkbox" id="voiceToggleJT" checked>
+      <label for="voiceToggleJT">Narration vocale française (TTS)</label>
+    </div>
+  </div>
+  <div class="hint">Lecture séquentielle avec incrustations et voix off. Échap ou clic pour quitter.</div>
 </div></div></div>
 
-<div class="launcher" id="launcherJT">
+<div class="launcher hidden" id="launcherJT">
 <div class="launcher-row">
-<button type="button" class="btn btn-primary" id="launchJT" disabled>▶ Lancer le JT MOVIE</button>
-<button type="button" class="btn btn-stop" id="stopJT">⏹ Arrêter</button>
-</div>
+  <button type="button" class="btn btn-primary" id="launchJT" disabled>▶ Lancer le JT MOVIE</button>
+  <button type="button" class="btn btn-stop" id="stopJT">⏹ Arrêter</button>
 </div>
 </div>
 
 <div class="status-bar" id="statusBar"><div class="spinner"></div><span id="statusTextBar">Préparation…</span></div>
 <div class="toast" id="toast"><span id="toastIcon">✓</span><span id="toastText">Message</span></div>
 
-<div class="debug-panel" id="debugPanel">
+<!-- Debug / Journal Panel -->
+<div class="debug-panel collapsed" id="debugPanel">
 <div class="debug-header" id="debugHeader">
-<div class="debug-tabs">
-<button type="button" class="debug-tab active" data-tab="journal" id="tabJournal">📻 Journal</button>
-<button type="button" class="debug-tab" data-tab="tech" id="tabTech">🖥️ Technique</button>
-</div>
-<div class="debug-actions">
-<button type="button" id="debugCopy">Copier</button>
-<button type="button" id="debugClear">Effacer</button>
-<button type="button" id="debugCollapse">−</button>
-</div>
+  <div class="debug-tabs">
+    <button type="button" class="debug-tab active" data-tab="journal" id="tabJournal">📻 Journal</button>
+    <button type="button" class="debug-tab" data-tab="tech" id="tabTech">🖥️ Technique</button>
+  </div>
+  <div class="debug-actions">
+    <button type="button" id="debugCopy">Copier</button>
+    <button type="button" id="debugClear">Effacer</button>
+    <button type="button" id="debugCollapse">+</button>
+  </div>
 </div>
 <div class="debug-body journal-body" id="journalBody"></div>
 <div class="debug-body hidden" id="techBody"></div>
@@ -385,334 +418,847 @@ input:focus,textarea:focus{outline:none;border-color:var(--acc)}
 
 <script>
 /* ============================================================
-   MOVIE — Application vidéo IA unifiée (anti-perte, multi-API, JT)
+   MOVIE — Application vidéo & photo IA unifiée
    ============================================================ */
 (function(){
 'use strict';
 
-// ======== CONFIG MULTI-API ========
-const API_CONFIG={
- providers:[
-  {name:'Agnes',baseUrl:'https://apihub.agnes-ai.com',createEndpoint:'/v1/videos',pollEndpoint:'/agnesapi',model:'agnes-video-v2.0',active:true,priority:1},
-  {name:'Kling 3.0',baseUrl:'https://api.klingai.com',createEndpoint:'/v1/videos',pollEndpoint:'/v1/videos/status',model:'kling-v3',active:false,priority:2},
-  {name:'MiniMax H3',baseUrl:'https://api.minimaxi.com',createEndpoint:'/v1/video_generation',pollEndpoint:'/v1/query/video_generation',model:'abab-video-1',active:false,priority:3},
-  {name:'Modellix',baseUrl:'https://api.modellix.ai',createEndpoint:'/v1/generate',pollEndpoint:'/v1/status',model:'modellix-video-v1',active:false,priority:4}
- ],
- get activeProvider(){return this.providers.find(p=>p.active)||this.providers[0]},
- set activeProvider(p){this.providers.forEach(x=>x.active=(x.name===p.name));}
+const API_CONFIG = {
+  baseUrl: 'https://apihub.agnes-ai.com',
+  v1Base: 'https://apihub.agnes-ai.com/v1',
+  pollEndpoint: '/agnesapi',
+  modelVideo: 'agnes-video-v2.0',
+  modelImage: 'agnes-image-2.1-flash',
+  modelText: 'agnes-2.5-flash',
+  frameRate: 24
 };
 
-const STORAGE={
- API_KEY:'movie_api_key',
- VIDEO_ID:'movie_video_id',
- VIDEO_URL:'movie_video_url',
- HISTORY:'movie_history',
- MODE:'movie_mode'
-};
-const POLL_INTERVAL_SEC=8;
-const MAX_POLL_ATTEMPTS=100;
-const MAX_IMAGE_SIZE=12*1024*1024;
-
-// ======== STATE ========
-const state={
- apiKey:'',
- mode:'movie',
- singleImage:null,
- videoId:null,
- videoUrl:null,
- isVideoLocked:false,
- pollingInterval:null,
- startTime:null,
- elapsedTimer:null,
- currentProvider:null,
- history:[],
- // JT
- keyPool:[],
- isRunning:false,
- stopRequested:false,
- selectedParties:new Set(['lfi','rn']),
- partyNews:{},
- selectedNews:[],
- script:null,
- palette:null,
- presenter:null,
- videos:[],
- isGeneratingVideos:false,
- voiceEnabled:true,
- currentUtterance:null,
- workingPollUrlBuilder:null
+const STORAGE = {
+  API_KEYS: 'movie_api_keys',
+  API_KEY_LEGACY: 'movie_api_key',
+  VIDEO_ID: 'movie_video_id',
+  VIDEO_URL: 'movie_video_url',
+  MODE: 'movie_mode'
 };
 
-// ======== DOM ========
-const els={
- apiKey:document.getElementById('apiKey'),
- modeMovie:document.getElementById('modeMovie'),
- modeJT:document.getElementById('modeJT'),
- imageInputMovie:document.getElementById('imageInputMovie'),
- uploadAreaMovie:document.getElementById('uploadAreaMovie'),
- imagePreviewMovie:document.getElementById('imagePreviewMovie'),
- promptMovie:document.getElementById('promptMovie'),
- styleMovie:document.getElementById('styleMovie'),
- durationMovie:document.getElementById('durationMovie'),
- btnGenerateMovie:document.getElementById('btnGenerateMovie'),
- videoContainerMovie:document.getElementById('videoContainerMovie'),
- videoPlayerMovie:document.getElementById('videoPlayerMovie'),
- loadingMovie:document.getElementById('loadingMovie'),
- elapsedMovie:document.getElementById('elapsedMovie'),
- lockedBadgeMovie:document.getElementById('lockedBadgeMovie'),
- btnDownloadMovie:document.getElementById('btnDownloadMovie'),
- btnNewGenMovie:document.getElementById('btnNewGenMovie'),
- btnRetry:document.getElementById('btnRetry'),
- retryBanner:document.getElementById('retryBanner'),
- apiStatus:document.getElementById('apiStatus'),
- statusDot:document.getElementById('statusDot'),
- statusText:document.getElementById('statusText'),
- logConsole:document.getElementById('journalBody'),
- pwaInstall:document.getElementById('pwaInstall'),
- btnPwaInstall:document.getElementById('btnPwaInstall')
+const STYLE_PROMPTS = {
+  custom: '',
+  cinematic: ', photorealistic cinematic 35mm film, anamorphic lens flare, shallow depth of field, dramatic atmospheric lighting, 8k film still, masterpiece',
+  ghibli: ', Studio Ghibli cinematic animation style, Hayao Miyazaki aesthetic, lush hand-painted watercolor backgrounds, soft whimsical lighting, peaceful masterpiece',
+  cyberpunk: ', cyberpunk futuristic megacity, neon holographic reflections, rainy reflective asphalt, high-tech dystopian atmosphere, cinematic lighting',
+  pixar: ', 3D animation Pixar Disney style, soft subsurface scattering, emotive expressive eyes, rich warm cinematic 3D render, 8k',
+  '90s': ', 1990s vintage retro anime aesthetic, VHS film grain, warm nostalgic color tones, classic cel animation',
+  naruto: ', anime style Naruto Shippuden, dynamic ninja action, hand-drawn cel shading, vibrant anime cinematography',
+  dbz: ', Dragon Ball Z anime style, Akira Toriyama aesthetic, intense kinetic energy, sharp line art, saturated retro colors',
+  demonslayer: ', Demon Slayer Kimetsu no Yaiba style, Ufotable aesthetic, breath effect particles, high contrast dramatic lighting',
+  jujutsu: ', Jujutsu Kaisen anime style, dark modern urban fantasy, MAPPA cinematography, gritty expressive action',
+  onepiece: ', One Piece anime style, Oda aesthetic, bold expressive linework, vibrant maritime colors',
+  simpson: ', The Simpsons cartoon animation style, Matt Groening style, yellow character tone, bold black outlines, flat primary colors'
 };
 
-// ======== INIT ========
+const POLL_INTERVAL_SEC = 7;
+const MAX_POLL_ATTEMPTS = 120;
+const MAX_IMAGE_SIZE = 14 * 1024 * 1024;
+
+// Global State
+const state = {
+  apiKeys: [],
+  apiKey: '',
+  mode: 'movie',
+  singleImage: null,
+  videoId: null,
+  videoUrl: null,
+  isVideoLocked: false,
+  pollingInterval: null,
+  startTime: null,
+  elapsedTimer: null,
+  // JT state
+  keyPool: [],
+  isRunning: false,
+  stopRequested: false,
+  selectedParties: new Set(['lfi','rn']),
+  partyNews: {},
+  selectedNews: [],
+  script: null,
+  palette: null,
+  presenter: null,
+  videos: [],
+  isGeneratingVideos: false,
+  voiceEnabled: true,
+  isPlayingFilm: false,
+  playRAF: null,
+  currentUtterance: null,
+  workingPollUrlBuilder: null
+};
+
+// DOM references
+let els = {};
+
 function init(){
- log('MOVIE initialisé','info');
- const savedApiKey=localStorage.getItem(STORAGE.API_KEY);
- const savedVideoId=localStorage.getItem(STORAGE.VIDEO_ID);
- const savedVideoUrl=localStorage.getItem(STORAGE.VIDEO_URL);
- const savedHistory=localStorage.getItem(STORAGE.HISTORY);
- const savedMode=localStorage.getItem(STORAGE.MODE);
- if(savedApiKey){state.apiKey=savedApiKey;els.apiKey.value=savedApiKey;}
- if(savedMode){state.mode=savedMode;updateModeUI();}
- if(savedVideoUrl){state.videoUrl=savedVideoUrl;state.isVideoLocked=true;displayMovieVideo(savedVideoUrl);showMovieVideo();log('Vidéo récupérée (anti-perte)','success');}
- else if(savedVideoId){state.videoId=savedVideoId;showRetryBanner();log('ID vidéo détecté — reprise polling','warning');}
- if(savedHistory){try{state.history=JSON.parse(savedHistory);}catch(e){log('Erreur historique','error');}}
- state.currentProvider=API_CONFIG.activeProvider;
- updateApiStatus();
- setupEventListeners();
- if(savedVideoId&&!savedVideoUrl)startPolling(state.videoId);
- window.deferredPwaPrompt=null;
- window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.deferredPwaPrompt=e;els.pwaInstall.classList.add('visible');});
-}
+  els = {
+    apiKeysInput: document.getElementById('api-keys-input'),
+    apiSaveBtn: document.getElementById('api-save-btn'),
+    apiClearBtn: document.getElementById('api-clear-btn'),
+    apiKeyBadge: document.getElementById('apiKeyBadge'),
+    apiKeyDot: document.getElementById('apiKeyDot'),
+    apiStatusLine: document.getElementById('api-status-line'),
+    apiStatusText: document.getElementById('api-status-text'),
+    apiKeysStatus: document.getElementById('api-keys-status'),
+    apiStatus: document.getElementById('apiStatus'),
+    statusDot: document.getElementById('statusDot'),
+    statusText: document.getElementById('statusText'),
+    modeMovie: document.getElementById('modeMovie'),
+    modeJT: document.getElementById('modeJT'),
+    sectionMovie: document.getElementById('sectionMovie'),
+    sectionJT: document.getElementById('sectionJT'),
+    launcherJT: document.getElementById('launcherJT'),
+    photoPromptInput: document.getElementById('photoPromptInput'),
+    btnGeneratePhoto: document.getElementById('btnGeneratePhoto'),
+    photoStatusLine: document.getElementById('photoStatusLine'),
+    photoStatusText: document.getElementById('photoStatusText'),
+    imageInputMovie: document.getElementById('imageInputMovie'),
+    uploadAreaMovie: document.getElementById('uploadAreaMovie'),
+    previewContainer: document.getElementById('previewContainer'),
+    imagePreviewMovie: document.getElementById('imagePreviewMovie'),
+    btnDownloadPhoto: document.getElementById('btnDownloadPhoto'),
+    btnRemovePhoto: document.getElementById('btnRemovePhoto'),
+    autoStyleText: document.getElementById('autoStyleText'),
+    promptMovie: document.getElementById('promptMovie'),
+    styleMovie: document.getElementById('styleMovie'),
+    durationMovie: document.getElementById('durationMovie'),
+    btnGenerateMovie: document.getElementById('btnGenerateMovie'),
+    videoContainerMovie: document.getElementById('videoContainerMovie'),
+    videoPlayerMovie: document.getElementById('videoPlayerMovie'),
+    loadingMovie: document.getElementById('loadingMovie'),
+    loadingMovieMsg: document.getElementById('loadingMovieMsg'),
+    elapsedMovie: document.getElementById('elapsedMovie'),
+    lockedBadgeMovie: document.getElementById('lockedBadgeMovie'),
+    videoActionsMovie: document.getElementById('videoActionsMovie'),
+    btnDownloadMovie: document.getElementById('btnDownloadMovie'),
+    btnNewGenMovie: document.getElementById('btnNewGenMovie'),
+    retryBanner: document.getElementById('retryBanner'),
+    btnRetry: document.getElementById('btnRetry'),
+    btnDismissRetry: document.getElementById('btnDismissRetry'),
+    pwaInstall: document.getElementById('pwaInstall'),
+    btnPwaInstall: document.getElementById('btnPwaInstall'),
+    journalBody: document.getElementById('journalBody'),
+    techBody: document.getElementById('techBody')
+  };
 
-// ======== MODE ========
-function updateModeUI(){
- if(state.mode==='movie'){els.modeMovie.classList.add('active');els.modeJT.classList.remove('active');document.getElementById('sectionMovie').classList.remove('hidden');document.getElementById('sectionJT').classList.add('hidden');}
- else{els.modeMovie.classList.remove('active');els.modeJT.classList.add('active');document.getElementById('sectionMovie').classList.add('hidden');document.getElementById('sectionJT').classList.remove('hidden');}
- validateMovieForm();
-}
-function validateMovieForm(){
- const hasKey=state.apiKey.length>0;
- const hasImage=!!state.singleImage;
- const hasPrompt=els.promptMovie.value.trim().length>0;
- els.btnGenerateMovie.disabled=!(hasKey&&hasImage&&hasPrompt);
-}
+  log('MOVIE initialisé avec succès', 'highlight');
 
-// ======== EVENTS ========
-function setupEventListeners(){
- els.apiKey.addEventListener('input',e=>{state.apiKey=e.target.value.trim();localStorage.setItem(STORAGE.API_KEY,state.apiKey);validateMovieForm();});
- els.modeMovie.addEventListener('click',()=>{state.mode='movie';localStorage.setItem(STORAGE.MODE,'movie');updateModeUI();});
- els.modeJT.addEventListener('click',()=>{state.mode='jt';localStorage.setItem(STORAGE.MODE,'jt');updateModeUI();});
- els.uploadAreaMovie.addEventListener('click',()=>els.imageInputMovie.click());
- els.imageInputMovie.addEventListener('change',e=>{if(e.target.files.length)handleMovieImage(e.target.files[0]);});
- els.uploadAreaMovie.addEventListener('dragover',e=>{e.preventDefault();els.uploadAreaMovie.classList.add('drag-over');});
- els.uploadAreaMovie.addEventListener('dragleave',()=>els.uploadAreaMovie.classList.remove('drag-over'));
- els.uploadAreaMovie.addEventListener('drop',e=>{e.preventDefault();els.uploadAreaMovie.classList.remove('drag-over');if(e.dataTransfer.files.length)handleMovieImage(e.dataTransfer.files[0]);});
- els.promptMovie.addEventListener('input',validateMovieForm);
- els.styleMovie.addEventListener('change',validateMovieForm);
- els.btnGenerateMovie.addEventListener('click',handleMovieGenerate);
- els.btnRetry.addEventListener('click',()=>{if(state.videoId){startPolling(state.videoId);hideRetryBanner();}else if(state.videoUrl){displayMovieVideo(state.videoUrl);showMovieVideo();}});
- els.btnNewGenMovie.addEventListener('click',resetMovie);
- els.btnDownloadMovie.addEventListener('click',downloadMovieVideo);
- els.btnPwaInstall.addEventListener('click',async()=>{if(window.deferredPwaPrompt){window.deferredPwaPrompt.prompt();const{outcome}=await window.deferredPwaPrompt.userChoice;log('PWA '+outcome,outcome==='accepted'?'success':'info');window.deferredPwaPrompt=null;els.pwaInstall.classList.remove('visible');}});
-}
+  // Load API Keys
+  loadSavedApiKeys();
 
-// ======== MOVIE IMAGE ========
-function handleMovieImage(file){
- if(!file.type.startsWith('image/')){log('Type non supporté','error');return;}
- if(file.size>MAX_IMAGE_SIZE){log('Image trop grande (12 Mo max)','error');return;}
- const reader=new FileReader();
- reader.onload=e=>{state.singleImage=e.target.result;els.imagePreviewMovie.src=e.target.result;els.imagePreviewMovie.classList.remove('hidden');analyzeMovieImage(e.target.result);validateMovieForm();log('Image chargée','success');};
- reader.readAsDataURL(file);
-}
-function analyzeMovieImage(dataUri){
- const img=new Image();
- img.onload=()=>{
-  const canvas=document.createElement('canvas');canvas.width=img.width;canvas.height=img.height;
-  const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0);
-  const d=ctx.getImageData(0,0,canvas.width,canvas.height).data;
-  let r=0,g=0,b=0,n=0;
-  for(let i=0;i<d.length;i+=10*4){r+=d[i];g+=d[i+1];b+=d[i+2];n++;}
-  r/=n;g/=n;b/=n;
-  let s='Aucun';
-  if(r>200&&g>150&&b<100)s='Golden Hour';
-  else if(r<60&&g<60&&b<60)s='Noir & Blanc';
-  else if(b>r&&b>g)s='Cyberpunk';
-  else if(g>r&&g>b)s='Rêveur';
-  else s='Cinématique';
-  document.getElementById('autoStyleText').textContent='Style suggéré : '+s;
-  log('Analyse image → '+s,'info');
- };
- img.src=dataUri;
-}
-
-// ======== MOVIE GENERATE ========
-function handleMovieGenerate(){
- if(!state.apiKey){log('Clé API manquante','error');return;}
- if(!state.singleImage){log('Aucune image','error');return;}
- state.isVideoLocked=false;state.videoId=null;state.videoUrl=null;state.startTime=Date.now();
- clearInterval(state.pollingInterval);state.pollingInterval=null;
- document.getElementById('videoContainerMovie').classList.add('hidden');
- els.videoPlayerMovie.src='';els.videoPlayerMovie.load();
- hideRetryBanner();showLoadingMovie();startMovieTimer();updateApiStatus('polling');
- log('Génération MOVIE — '+state.currentProvider.name,'info');
- createMovieVideo(state.singleImage,els.promptMovie.value.trim()).catch(err=>{log('Échec : '+err.message,'error');updateApiStatus('error');hideLoadingMovie();stopMovieTimer();});
-}
-async function createMovieVideo(base64,prompt){
- const provider=state.currentProvider;
- const url=provider.baseUrl+provider.createEndpoint;
- log('POST '+provider.createEndpoint+' — '+provider.name,'polling');
- const body={model:provider.model,prompt,image:base64,num_frames:parseInt(els.durationMovie.value,10),frame_rate:24};
- const res=await apiFetch(url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+state.apiKey,'X-API-Key':state.apiKey},body:JSON.stringify(body)});
- if(!res.ok){const t=await res.text();throw new Error('HTTP '+res.status+': '+t);}
- const d=await res.json();
- const vid=d.video_id||d.id||d.videoId||d.task_id;
- if(!vid)throw new Error('Pas de video_id');
- state.videoId=vid;localStorage.setItem(STORAGE.VIDEO_ID,vid);
- log('ID vidéo : '+vid,'success');
- startPolling(vid);
-}
-function startPolling(videoId){
- if(state.pollingInterval)clearInterval(state.pollingInterval);
- state.isVideoLocked=false;
- log('Polling ('+POLL_INTERVAL_SEC+'s) pour '+videoId,'polling');
- const poll=async()=>{
-  if(state.isVideoLocked){log('Vidéo verrouillée — arrêt polling','success');return;}
-  try{
-   const provider=state.currentProvider;
-   const pollUrl=provider.baseUrl+provider.pollEndpoint+'?video_id='+encodeURIComponent(videoId)+'&model_name='+encodeURIComponent(provider.model);
-   log('GET '+provider.pollEndpoint+' — polling','polling');
-   const res=await apiFetch(pollUrl,{method:'GET',headers:{'Authorization':'Bearer '+state.apiKey,'X-API-Key':state.apiKey}});
-   if(!res.ok)throw new Error('HTTP '+res.status);
-   const d=await res.json();
-   const status=d.status||d.state||'';
-   log('Statut : '+status,'info');
-   if(status==='completed'||status==='success'||status==='succeeded'||d.video_url){
-    const videoUrl=d.video_url||d.url||d.videoUrl||(d.metadata&&d.metadata.url);
-    if(videoUrl)onMovieReady(videoUrl);else throw new Error('Pas d\'URL');
-   }else if(status==='failed'||status==='error'){throw new Error(d.error||'Échec');}
-   else log('En cours… ('+status+')','polling');
-  }catch(err){
-   log('Erreur polling : '+err.message,'error');
-   attemptFallback(videoId);
+  // Load Mode
+  const savedMode = localStorage.getItem(STORAGE.MODE);
+  if(savedMode && (savedMode === 'movie' || savedMode === 'jt')) {
+    state.mode = savedMode;
   }
- };
- poll();
- state.pollingInterval=setInterval(poll,POLL_INTERVAL_SEC*1000);
+  updateModeUI();
+
+  // Anti-loss check
+  const savedVideoUrl = localStorage.getItem(STORAGE.VIDEO_URL);
+  const savedVideoId = localStorage.getItem(STORAGE.VIDEO_ID);
+  if(savedVideoUrl) {
+    state.videoUrl = savedVideoUrl;
+    state.isVideoLocked = true;
+    displayMovieVideo(savedVideoUrl);
+    showMovieVideo();
+    log('Vidéo précédente restaurée (anti-perte)', 'success');
+  } else if(savedVideoId) {
+    state.videoId = savedVideoId;
+    if(els.retryBanner) els.retryBanner.classList.remove('hidden');
+    log('Génération interrompue détectée (ID: ' + savedVideoId + ')', 'warn');
+  }
+
+  setupEventListeners();
+  updateApiStatus('ready');
+  JTinitTTS();
+  JTrenderParties();
+  JTrenderScript();
+  JTrenderVideos();
+  JTupdateButtons();
+  registerSW();
+
+  window.deferredPwaPrompt = null;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    window.deferredPwaPrompt = e;
+    if(els.pwaInstall) els.pwaInstall.classList.add('visible');
+  });
 }
-function attemptFallback(videoId){
- const idx=API_CONFIG.providers.findIndex(p=>p.name===state.currentProvider.name);
- const next=API_CONFIG.providers.slice(idx+1).find(p=>p.active);
- if(next){log('Fallback → '+next.name,'warning');state.currentProvider=next;startPolling(videoId);}
- else{log('Aucun fallback','error');updateApiStatus('error');hideLoadingMovie();stopMovieTimer();}
+
+// ======== API KEY MANAGEMENT ========
+function loadSavedApiKeys(){
+  let rawKeys = [];
+  const stored = localStorage.getItem(STORAGE.API_KEYS) || localStorage.getItem(STORAGE.API_KEY_LEGACY);
+  if(stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if(Array.isArray(parsed)) rawKeys = parsed;
+      else if(typeof parsed === 'string') rawKeys = [parsed];
+    } catch(e) {
+      if(typeof stored === 'string') rawKeys = stored.split('\n').map(s => s.trim()).filter(Boolean);
+    }
+  }
+
+  rawKeys = rawKeys.filter(k => typeof k === 'string' && k.trim().length > 0);
+  state.apiKeys = rawKeys;
+  state.apiKey = rawKeys[0] || '';
+  state.keyPool = rawKeys.map(k => ({ key: k.trim(), lastUsed: 0, cooldownUntil: 0, active: true, errorCount: 0 }));
+
+  if(els.apiKeysInput) {
+    els.apiKeysInput.value = rawKeys.join('\n');
+  }
+  renderApiKeysStatus();
+  validateMovieForm();
+  JTupdateButtons();
 }
+
+function saveApiKeysFromInput(){
+  const val = els.apiKeysInput ? els.apiKeysInput.value : '';
+  const lines = val.split('\n').map(l => l.trim()).filter(l => l.length > 5);
+  state.apiKeys = lines;
+  state.apiKey = lines[0] || '';
+  state.keyPool = lines.map(k => ({ key: k, lastUsed: 0, cooldownUntil: 0, active: true, errorCount: 0 }));
+
+  localStorage.setItem(STORAGE.API_KEYS, JSON.stringify(lines));
+  localStorage.setItem(STORAGE.API_KEY_LEGACY, JSON.stringify(lines));
+
+  renderApiKeysStatus();
+  validateMovieForm();
+  JTupdateButtons();
+
+  if(lines.length > 0) {
+    showToast(lines.length + ' clé(s) API enregistrée(s)', 'success');
+    log(lines.length + ' clé(s) API validée(s) en local', 'success');
+  } else {
+    showToast('Aucune clé valide détectée', 'warn');
+  }
+}
+
+function clearApiKeys(){
+  state.apiKeys = [];
+  state.apiKey = '';
+  state.keyPool = [];
+  localStorage.removeItem(STORAGE.API_KEYS);
+  localStorage.removeItem(STORAGE.API_KEY_LEGACY);
+  if(els.apiKeysInput) els.apiKeysInput.value = '';
+  renderApiKeysStatus();
+  validateMovieForm();
+  JTupdateButtons();
+  showToast('Clés effacées', 'warn');
+}
+
+function renderApiKeysStatus(){
+  const count = state.apiKeys.length;
+  if(els.apiKeyBadge) {
+    els.apiKeyBadge.textContent = count + ' clé' + (count > 1 ? 's' : '');
+    els.apiKeyBadge.className = 'badge ' + (count > 0 ? 'ok' : '');
+  }
+  if(els.apiKeyDot) {
+    els.apiKeyDot.className = 'dot ' + (count > 0 ? 'ok' : 'warn');
+  }
+  if(els.apiStatusText) {
+    els.apiStatusText.textContent = count > 0 
+      ? count + ' clé(s) prête(s) · Prêt pour la génération' 
+      : 'Aucune clé API enregistrée — Collez votre clé ci-dessus';
+  }
+
+  if(els.apiKeysStatus) {
+    if(count === 0) {
+      els.apiKeysStatus.innerHTML = '';
+      return;
+    }
+    els.apiKeysStatus.innerHTML = state.keyPool.map((k, i) => {
+      const masked = k.key.length > 10 ? k.key.slice(0, 6) + '…' + k.key.slice(-4) : 'sk-******';
+      const stateLabel = !k.active ? 'Erreur' : (k.cooldownUntil && k.cooldownUntil > Date.now()) ? 'Cooldown' : 'Active';
+      const stateClass = !k.active ? 'dead' : (k.cooldownUntil && k.cooldownUntil > Date.now()) ? 'cool' : '';
+      return '<div class="key-row"><span class="key-id">Clé #' + (i + 1) + ' (' + masked + ')</span><span class="key-state ' + stateClass + '">' + stateLabel + '</span></div>';
+    }).join('');
+  }
+}
+
+// ======== MODE TOGGLE ========
+function updateModeUI(){
+  if(state.mode === 'movie') {
+    els.modeMovie.classList.add('active');
+    els.modeJT.classList.remove('active');
+    els.sectionMovie.classList.remove('hidden');
+    els.sectionJT.classList.add('hidden');
+    document.getElementById('sectionNewsJT').classList.add('hidden');
+    document.getElementById('sectionScriptJT').classList.add('hidden');
+    document.getElementById('sectionVideosJT').classList.add('hidden');
+    document.getElementById('sectionPlayerJT').classList.add('hidden');
+    els.launcherJT.classList.add('hidden');
+  } else {
+    els.modeMovie.classList.remove('active');
+    els.modeJT.classList.add('active');
+    els.sectionMovie.classList.add('hidden');
+    els.sectionJT.classList.remove('hidden');
+    document.getElementById('sectionNewsJT').classList.remove('hidden');
+    els.launcherJT.classList.remove('hidden');
+  }
+  validateMovieForm();
+}
+
+// ======== EVENT LISTENERS ========
+function setupEventListeners(){
+  if(els.apiSaveBtn) els.apiSaveBtn.addEventListener('click', saveApiKeysFromInput);
+  if(els.apiClearBtn) els.apiClearBtn.addEventListener('click', clearApiKeys);
+  if(els.apiKeysInput) {
+    els.apiKeysInput.addEventListener('keydown', e => {
+      if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) saveApiKeysFromInput();
+    });
+  }
+
+  els.modeMovie.addEventListener('click', () => { state.mode = 'movie'; localStorage.setItem(STORAGE.MODE, 'movie'); updateModeUI(); });
+  els.modeJT.addEventListener('click', () => { state.mode = 'jt'; localStorage.setItem(STORAGE.MODE, 'jt'); updateModeUI(); });
+
+  // Photo Generation
+  els.btnGeneratePhoto.addEventListener('click', handleGeneratePhoto);
+  els.photoPromptInput.addEventListener('keydown', e => { if(e.key === 'Enter') handleGeneratePhoto(); });
+  els.btnDownloadPhoto.addEventListener('click', downloadCurrentPhoto);
+  els.btnRemovePhoto.addEventListener('click', removeCurrentPhoto);
+
+  // Upload area
+  els.uploadAreaMovie.addEventListener('click', () => els.imageInputMovie.click());
+  els.imageInputMovie.addEventListener('change', e => { if(e.target.files.length) handleMovieImage(e.target.files[0]); });
+  els.uploadAreaMovie.addEventListener('dragover', e => { e.preventDefault(); els.uploadAreaMovie.classList.add('drag-over'); });
+  els.uploadAreaMovie.addEventListener('dragleave', () => els.uploadAreaMovie.classList.remove('drag-over'));
+  els.uploadAreaMovie.addEventListener('drop', e => {
+    e.preventDefault();
+    els.uploadAreaMovie.classList.remove('drag-over');
+    if(e.dataTransfer.files.length) handleMovieImage(e.dataTransfer.files[0]);
+  });
+
+  els.promptMovie.addEventListener('input', validateMovieForm);
+  els.styleMovie.addEventListener('change', () => {
+    validateMovieForm();
+    log('Style sélectionné : ' + els.styleMovie.options[els.styleMovie.selectedIndex].text, 'info');
+  });
+
+  els.btnGenerateMovie.addEventListener('click', handleMovieGenerate);
+  els.btnRetry.addEventListener('click', () => {
+    if(state.videoId) {
+      if(els.retryBanner) els.retryBanner.classList.add('hidden');
+      startPolling(state.videoId);
+    }
+  });
+  if(els.btnDismissRetry) {
+    els.btnDismissRetry.addEventListener('click', () => {
+      localStorage.removeItem(STORAGE.VIDEO_ID);
+      state.videoId = null;
+      if(els.retryBanner) els.retryBanner.classList.add('hidden');
+    });
+  }
+
+  els.btnNewGenMovie.addEventListener('click', resetMovie);
+  els.btnDownloadMovie.addEventListener('click', downloadMovieVideo);
+
+  // PWA
+  els.btnPwaInstall.addEventListener('click', async () => {
+    if(window.deferredPwaPrompt){
+      window.deferredPwaPrompt.prompt();
+      const {outcome} = await window.deferredPwaPrompt.userChoice;
+      log('PWA : ' + outcome, outcome === 'accepted' ? 'success' : 'info');
+      window.deferredPwaPrompt = null;
+      els.pwaInstall.classList.remove('visible');
+    }
+  });
+
+  // JT Events
+  document.querySelectorAll('[data-toggle]').forEach(h => {
+    h.addEventListener('click', () => {
+      const el = document.getElementById(h.dataset.toggle);
+      if(el) el.classList.toggle('open');
+    });
+  });
+
+  document.getElementById('refreshNewsJT').addEventListener('click', JTloadAllNews);
+  document.getElementById('launchJT').addEventListener('click', async () => {
+    if(Object.keys(state.partyNews).length === 0){
+      await JTloadAllNews();
+      if(state.selectedNews.length === 0) return;
+    }
+    if(state.selectedNews.length > 0) await JTrunJT();
+  });
+
+  document.getElementById('stopJT').addEventListener('click', JTstopJT);
+  document.getElementById('playFilmJT').addEventListener('click', JTplayFilm);
+  document.getElementById('replayJT').addEventListener('click', JTplayFilm);
+  document.getElementById('playerOverlay').addEventListener('click', JTstopFilmPlayback);
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && state.isPlayingFilm) JTstopFilmPlayback(); });
+  document.getElementById('voiceToggleJT').addEventListener('change', e => {
+    state.voiceEnabled = e.target.checked;
+    if(!state.voiceEnabled) JTstopTTS();
+  });
+
+  // Debug Panel
+  document.getElementById('tabJournal').addEventListener('click', () => {
+    els.journalBody.classList.remove('hidden');
+    els.techBody.classList.add('hidden');
+    document.getElementById('tabJournal').classList.add('active');
+    document.getElementById('tabTech').classList.remove('active');
+  });
+  document.getElementById('tabTech').addEventListener('click', () => {
+    els.techBody.classList.remove('hidden');
+    els.journalBody.classList.add('hidden');
+    document.getElementById('tabTech').classList.add('active');
+    document.getElementById('tabJournal').classList.remove('active');
+  });
+  document.getElementById('debugClear').addEventListener('click', e => {
+    e.stopPropagation();
+    els.journalBody.innerHTML = '';
+    els.techBody.innerHTML = '';
+  });
+  document.getElementById('debugCopy').addEventListener('click', e => {
+    e.stopPropagation();
+    try {
+      navigator.clipboard.writeText(els.journalBody.innerText).then(() => showToast('Journal copié', 'success'));
+    } catch(e){ showToast('Échec copie', 'error'); }
+  });
+  document.getElementById('debugCollapse').addEventListener('click', e => {
+    e.stopPropagation();
+    const p = document.getElementById('debugPanel');
+    p.classList.toggle('collapsed');
+    document.getElementById('debugCollapse').textContent = p.classList.contains('collapsed') ? '+' : '−';
+  });
+}
+
+function validateMovieForm(){
+  const hasKey = state.apiKey.length > 0;
+  const hasPrompt = els.promptMovie && els.promptMovie.value.trim().length > 0;
+  // Allows generation if user has an image OR prompt (text-to-video / image-to-video)
+  if(els.btnGenerateMovie) {
+    els.btnGenerateMovie.disabled = !(hasKey && (hasPrompt || state.singleImage));
+  }
+}
+
+// ======== PHOTO GENERATION (TEXT-TO-IMAGE) ========
+async function handleGeneratePhoto(){
+  if(!state.apiKey) {
+    showToast('Veuillez d\'abord enregistrer votre clé API Agnes ci-dessus', 'error');
+    if(els.apiKeysInput) els.apiKeysInput.focus();
+    return;
+  }
+  const prompt = els.photoPromptInput.value.trim();
+  if(!prompt) {
+    showToast('Veuillez entrer une description pour votre photo', 'warn');
+    els.photoPromptInput.focus();
+    return;
+  }
+
+  els.btnGeneratePhoto.disabled = true;
+  els.photoStatusLine.classList.remove('hidden');
+  els.photoStatusText.textContent = 'Génération de la photo en haute définition…';
+  log('Création photo IA via Agnes Image 2.1 : « ' + prompt.slice(0, 50) + '… »', 'highlight');
+
+  try {
+    const body = {
+      model: API_CONFIG.modelImage,
+      prompt: sanitizeText(prompt),
+      n: 1,
+      size: '1K',
+      ratio: '16:9'
+    };
+
+    const res = await fetch(API_CONFIG.v1Base + '/images/generations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + state.apiKey
+      },
+      body: JSON.stringify(body)
+    });
+
+    if(!res.ok) {
+      const errTxt = await res.text().catch(() => '');
+      throw new Error('HTTP ' + res.status + ' : ' + errTxt.slice(0, 200));
+    }
+
+    const data = await res.json();
+    const item = data.data && data.data[0];
+    if(!item) throw new Error('Aucune image reçue de l\'API');
+
+    const imageUrl = item.url || (item.b64_json ? 'data:image/png;base64,' + item.b64_json : null);
+    if(!imageUrl) throw new Error('Format d\'image inconnu');
+
+    // Display image in preview
+    state.singleImage = imageUrl;
+    els.imagePreviewMovie.src = imageUrl;
+    els.previewContainer.classList.remove('hidden');
+    els.autoStyleText.textContent = 'Photo IA prête pour l\'animation vidéo.';
+    
+    // Auto-fill video prompt if empty
+    if(!els.promptMovie.value.trim()) {
+      els.promptMovie.value = 'Cinematic motion, ' + prompt;
+    }
+
+    validateMovieForm();
+    showToast('Photo IA créée avec succès !', 'success');
+    log('Photo générée et prête à être animée', 'success');
+  } catch(err) {
+    log('Erreur génération photo : ' + err.message, 'error');
+    showToast('Échec génération photo : ' + err.message, 'error');
+  } finally {
+    els.btnGeneratePhoto.disabled = false;
+    els.photoStatusLine.classList.add('hidden');
+  }
+}
+
+function downloadCurrentPhoto(){
+  if(!state.singleImage) return;
+  const a = document.createElement('a');
+  a.href = state.singleImage;
+  a.download = 'movie-photo-' + Date.now() + '.png';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  showToast('Téléchargement de la photo lancé', 'success');
+}
+
+function removeCurrentPhoto(){
+  state.singleImage = null;
+  els.imagePreviewMovie.src = '';
+  els.previewContainer.classList.add('hidden');
+  els.imageInputMovie.value = '';
+  validateMovieForm();
+}
+
+// ======== IMAGE UPLOAD HANDLER ========
+function handleMovieImage(file){
+  if(!file.type.startsWith('image/')){
+    showToast('Format non supporté. Choisissez une image.', 'error');
+    return;
+  }
+  if(file.size > MAX_IMAGE_SIZE){
+    showToast('Image trop volumineuse (14 Mo max)', 'error');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    state.singleImage = e.target.result;
+    els.imagePreviewMovie.src = e.target.result;
+    els.previewContainer.classList.remove('hidden');
+    analyzeMovieImage(e.target.result);
+    validateMovieForm();
+    log('Image source chargée avec succès', 'success');
+    showToast('Image chargée', 'success');
+  };
+  reader.readAsDataURL(file);
+}
+
+function analyzeMovieImage(dataUri){
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width; canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    const d = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    let r = 0, g = 0, b = 0, n = 0;
+    for(let i = 0; i < d.length; i += 16 * 4){
+      r += d[i]; g += d[i+1]; b += d[i+2]; n++;
+    }
+    r /= n; g /= n; b /= n;
+    let s = 'Cinématique standard';
+    if(r > 190 && g > 140 && b < 100) s = 'Golden Hour chaleureux';
+    else if(r < 60 && g < 60 && b < 60) s = 'Sombre / Noir & Blanc';
+    else if(b > r && b > g) s = 'Cyberpunk néon bleuté';
+    else if(g > r && g > b) s = 'Nature / Végétal';
+    els.autoStyleText.textContent = 'Ambiance détectée : ' + s;
+  };
+  img.src = dataUri;
+}
+
+// ======== VIDEO GENERATION (MOVIE MODE) ========
+function handleMovieGenerate(){
+  if(!state.apiKey){
+    showToast('Clé API manquante', 'error');
+    return;
+  }
+  const rawPrompt = els.promptMovie.value.trim();
+  const selectedStyle = els.styleMovie.value;
+  const styleAddon = STYLE_PROMPTS[selectedStyle] || '';
+  const finalPrompt = rawPrompt + styleAddon;
+
+  state.isVideoLocked = false;
+  state.videoId = null;
+  state.videoUrl = null;
+  state.startTime = Date.now();
+  if(state.pollingInterval) clearInterval(state.pollingInterval);
+
+  els.videoContainerMovie.classList.remove('hidden');
+  els.videoPlayerMovie.src = '';
+  els.videoActionsMovie.classList.add('hidden');
+  els.lockedBadgeMovie.classList.add('hidden');
+  els.loadingMovie.classList.remove('hidden');
+  startMovieTimer();
+  updateApiStatus('polling');
+
+  log('Démarrage génération vidéo MOVIE…', 'highlight');
+  log('Prompt : ' + finalPrompt.slice(0, 100) + '…', 'info');
+
+  createMovieVideo(state.singleImage, finalPrompt)
+    .catch(err => {
+      log('Échec création vidéo : ' + err.message, 'error');
+      showToast('Erreur : ' + err.message, 'error');
+      updateApiStatus('error');
+      els.loadingMovie.classList.add('hidden');
+      stopMovieTimer();
+    });
+}
+
+async function createMovieVideo(imageSource, prompt){
+  const numFrames = parseInt(els.durationMovie.value, 10) || 153;
+  const body = {
+    model: API_CONFIG.modelVideo,
+    prompt: sanitizeText(prompt),
+    num_frames: numFrames,
+    frame_rate: API_CONFIG.frameRate
+  };
+
+  if(imageSource) {
+    body.image = imageSource;
+  }
+
+  const res = await fetch(API_CONFIG.v1Base + '/videos', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + state.apiKey
+    },
+    body: JSON.stringify(body)
+  });
+
+  if(!res.ok) {
+    const txt = await res.text().catch(() => '');
+    throw new Error('HTTP ' + res.status + ' : ' + txt.slice(0, 250));
+  }
+
+  const d = await res.json();
+  const vid = d.video_id || d.id || d.videoId || d.task_id;
+  if(!vid) throw new Error('Aucun identifiant de tâche vidéo renvoyé');
+
+  state.videoId = vid;
+  localStorage.setItem(STORAGE.VIDEO_ID, vid);
+  log('Tâche vidéo enregistrée : ' + vid, 'success');
+  startPolling(vid);
+}
+
+function startPolling(videoId){
+  if(state.pollingInterval) clearInterval(state.pollingInterval);
+  state.isVideoLocked = false;
+  log('Début du suivi de génération (' + POLL_INTERVAL_SEC + 's)…', 'polling');
+
+  let attempts = 0;
+  const poll = async () => {
+    if(state.isVideoLocked) return;
+    attempts++;
+
+    // Agnes poll endpoints
+    const pollUrls = [
+      API_CONFIG.baseUrl + API_CONFIG.pollEndpoint + '?video_id=' + encodeURIComponent(videoId) + '&model_name=' + encodeURIComponent(API_CONFIG.modelVideo),
+      API_CONFIG.v1Base + '/videos/' + encodeURIComponent(videoId),
+      API_CONFIG.v1Base + '/videos/' + encodeURIComponent(videoId) + '/status'
+    ];
+
+    let successRes = null;
+    for(const u of pollUrls) {
+      try {
+        const res = await fetch(u, {
+          method: 'GET',
+          headers: { 'Authorization': 'Bearer ' + state.apiKey }
+        });
+        if(res.ok) {
+          successRes = await res.json();
+          break;
+        }
+      } catch(e) {}
+    }
+
+    if(successRes) {
+      const st = successRes.status || successRes.state || '';
+      if(els.loadingMovieMsg) {
+        els.loadingMovieMsg.textContent = 'État de génération : ' + (st || 'en cours') + ' (tentative ' + attempts + ')';
+      }
+
+      if(st === 'completed' || st === 'success' || st === 'succeeded' || successRes.video_url || successRes.url) {
+        const url = successRes.video_url || successRes.url || (successRes.metadata && successRes.metadata.url);
+        if(url) {
+          onMovieReady(url);
+          return;
+        }
+      } else if(st === 'failed' || st === 'error') {
+        throw new Error(successRes.error || 'Échec du calcul sur les serveurs de rendu');
+      }
+    }
+
+    if(attempts >= MAX_POLL_ATTEMPTS) {
+      clearInterval(state.pollingInterval);
+      throw new Error('Délai dépassé lors du calcul de la vidéo');
+    }
+  };
+
+  poll();
+  state.pollingInterval = setInterval(poll, POLL_INTERVAL_SEC * 1000);
+}
+
 function onMovieReady(videoUrl){
- state.isVideoLocked=true;state.videoUrl=videoUrl;
- clearInterval(state.pollingInterval);state.pollingInterval=null;
- stopMovieTimer();hideLoadingMovie();
- localStorage.setItem(STORAGE.VIDEO_URL,videoUrl);
- displayMovieVideo(videoUrl);
- showMovieVideo();
- updateApiStatus('success');
- log('Vidéo prête et verrouillée : '+videoUrl,'success');
- log('Anti-perte activé','success');
+  state.isVideoLocked = true;
+  state.videoUrl = videoUrl;
+  if(state.pollingInterval) clearInterval(state.pollingInterval);
+  stopMovieTimer();
+  els.loadingMovie.classList.add('hidden');
+  localStorage.setItem(STORAGE.VIDEO_URL, videoUrl);
+  localStorage.removeItem(STORAGE.VIDEO_ID);
+
+  displayMovieVideo(videoUrl);
+  showMovieVideo();
+  updateApiStatus('success');
+  showToast('Votre vidéo IA est prête !', 'success');
+  log('Vidéo générée avec succès : ' + videoUrl, 'success');
 }
 
-// ======== MOVIE DISPLAY ========
 function displayMovieVideo(url){
- els.videoPlayerMovie.src=url;els.videoPlayerMovie.load();
- els.lockedBadgeMovie.textContent='VERROUILLÉ — ANTI-PERTE ACTIVÉ';
- els.btnDownloadMovie.disabled=false;els.btnDownloadMovie.dataset.url=url;
+  els.videoPlayerMovie.src = url;
+  els.videoPlayerMovie.load();
+  els.lockedBadgeMovie.classList.remove('hidden');
+  els.videoActionsMovie.classList.remove('hidden');
+  els.btnDownloadMovie.dataset.url = url;
 }
-function showMovieVideo(){document.getElementById('videoContainerMovie').classList.remove('hidden');document.getElementById('videoContainerMovie').scrollIntoView({behavior:'smooth'});}
-function hideLoadingMovie(){els.loadingMovie.classList.add('hidden');}
-function showLoadingMovie(){els.loadingMovie.classList.remove('hidden');}
-function showRetryBanner(){els.retryBanner.classList.remove('hidden');}
-function hideRetryBanner(){els.retryBanner.classList.add('hidden');}
+
+function showMovieVideo(){
+  els.videoContainerMovie.classList.remove('hidden');
+  els.videoContainerMovie.scrollIntoView({ behavior: 'smooth' });
+}
+
 function resetMovie(){
- state.isVideoLocked=false;state.videoId=null;state.videoUrl=null;
- clearInterval(state.pollingInterval);state.pollingInterval=null;
- localStorage.removeItem(STORAGE.VIDEO_ID);localStorage.removeItem(STORAGE.VIDEO_URL);
- document.getElementById('videoContainerMovie').classList.add('hidden');
- els.videoPlayerMovie.src='';els.videoPlayerMovie.load();
- hideRetryBanner();hideLoadingMovie();stopMovieTimer();
- els.imagePreviewMovie.src='';els.imagePreviewMovie.classList.add('hidden');state.singleImage=null;
- validateMovieForm();updateApiStatus('idle');log('Réinitialisé','info');
+  state.isVideoLocked = false;
+  state.videoId = null;
+  state.videoUrl = null;
+  if(state.pollingInterval) clearInterval(state.pollingInterval);
+  localStorage.removeItem(STORAGE.VIDEO_ID);
+  localStorage.removeItem(STORAGE.VIDEO_URL);
+  els.videoContainerMovie.classList.add('hidden');
+  els.videoPlayerMovie.src = '';
+  els.videoActionsMovie.classList.add('hidden');
+  els.lockedBadgeMovie.classList.add('hidden');
+  stopMovieTimer();
+  updateApiStatus('ready');
+  log('Session vidéo réinitialisée', 'info');
 }
+
 function downloadMovieVideo(){
- const url=els.btnDownloadMovie.dataset.url;if(!url)return;
- const a=document.createElement('a');a.href=url;a.download='movie-video-'+Date.now()+'.mp4';document.body.appendChild(a);a.click();document.body.removeChild(a);
- log('Téléchargement démarré','success');
+  const url = els.btnDownloadMovie.dataset.url;
+  if(!url) return;
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'movie-video-' + Date.now() + '.mp4';
+  a.target = '_blank';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  showToast('Téléchargement de la vidéo démarré', 'success');
 }
-// ======== TIMER ========
-function startMovieTimer(){stopMovieTimer();state.elapsedTimer=setInterval(()=>{const e=Math.floor((Date.now()-state.startTime)/1000);const m=Math.floor(e/60).toString().padStart(2,'0');const s=(e%60).toString().padStart(2,'0');els.elapsedMovie.textContent=m+':'+s;},1000);}
-function stopMovieTimer(){if(state.elapsedTimer){clearInterval(state.elapsedTimer);state.elapsedTimer=null;}}
 
-// ======== LOG ========
-function log(msg,level){
- const now=new Date();const t=now.toLocaleTimeString('fr-FR',{hour12:false});
- const body=document.getElementById('journalBody');if(!body)return;
- const entry=document.createElement('div');entry.className='j-entry '+(level||'info');
- entry.innerHTML='<span class="j-time">['+t+']</span><span class="j-msg">'+escapeHtml(msg)+'</span>';
- body.appendChild(entry);body.scrollTop=body.scrollHeight;
+function startMovieTimer(){
+  stopMovieTimer();
+  state.elapsedTimer = setInterval(() => {
+    const e = Math.floor((Date.now() - state.startTime) / 1000);
+    const m = Math.floor(e / 60).toString().padStart(2, '0');
+    const s = (e % 60).toString().padStart(2, '0');
+    els.elapsedMovie.textContent = m + ':' + s;
+  }, 1000);
 }
-function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+
+function stopMovieTimer(){
+  if(state.elapsedTimer) {
+    clearInterval(state.elapsedTimer);
+    state.elapsedTimer = null;
+  }
+}
+
+// ======== LOGGING & STATUS ========
+function log(msg, level){
+  const now = new Date();
+  const t = now.toLocaleTimeString('fr-FR', { hour12: false });
+  const body = els.journalBody || document.getElementById('journalBody');
+  if(!body) return;
+  const entry = document.createElement('div');
+  entry.className = 'j-entry ' + (level || 'info');
+  entry.innerHTML = '<span class="j-time">[' + t + ']</span><span class="j-msg">' + escapeHtml(msg) + '</span>';
+  body.appendChild(entry);
+  body.scrollTop = body.scrollHeight;
+}
+
+function escapeHtml(t){
+  const d = document.createElement('div');
+  d.textContent = t;
+  return d.innerHTML;
+}
+
 function updateApiStatus(status){
- const dot=els.statusDot;const txt=els.statusText;
- dot.className='dot';
- switch(status){
-  case 'polling':dot.classList.add();txt.textContent=state.currentProvider.name+' — Polling';break;
-  case 'success':dot.classList.add();txt.textContent=state.currentProvider.name+' — Vidéo prête';break;
-  case 'error':dot.classList.add();txt.textContent=state.currentProvider.name+' — Erreur';break;
-  default:txt.textContent=state.currentProvider.name+' — Prêt';
- }
+  const dot = els.statusDot;
+  const txt = els.statusText;
+  if(!dot || !txt) return;
+  dot.className = 'dot';
+
+  switch(status){
+    case 'polling':
+      dot.classList.add('polling');
+      txt.textContent = 'Agnes AI — Génération en cours…';
+      break;
+    case 'success':
+      dot.classList.add('ok');
+      txt.textContent = 'Agnes AI — Rendu terminé ✓';
+      break;
+    case 'error':
+      dot.classList.add('error');
+      txt.textContent = 'Agnes AI — Incident détecté';
+      break;
+    default:
+      if(state.apiKeys.length > 0) {
+        dot.classList.add('ok');
+        txt.textContent = 'Agnes AI — Prêt (' + state.apiKeys.length + ' clé' + (state.apiKeys.length > 1 ? 's' : '') + ')';
+      } else {
+        dot.classList.add('warn');
+        txt.textContent = 'Agnes AI — En attente d\'une clé API';
+      }
+  }
 }
 
-// ======== API FETCH ========
-async function apiFetch(url,options,label,maxAttempts){
- options=options||{};label=label||'API';maxAttempts=maxAttempts||6;
- for(let a=0;a<maxAttempts;a++){
-  try{
-   const res=await fetch(url,options);
-   if(res.status===429){await sleep(30000);continue;}
-   if(res.status===503){await sleep(10000);continue;}
-   return res;
-  }catch(e){await sleep(5000);}
- }
- return fetch(url,options);
+function showToast(msg, type='success', duration=2800){
+  const el = document.getElementById('toast');
+  const icon = document.getElementById('toastIcon');
+  const text = document.getElementById('toastText');
+  if(!el || !icon || !text) return;
+  el.className = 'toast ' + type;
+  icon.textContent = type === 'success' ? '✓' : (type === 'error' ? '✕' : '⚠');
+  text.textContent = msg;
+  el.classList.add('visible');
+  setTimeout(() => el.classList.remove('visible'), duration);
 }
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
-// ======== PWA SW ========
-const SW_CODE=`
-const CACHE_NAME='movie-v1';const ASSETS=['./','./index.html'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(ASSETS))));
-self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(resp=>resp||fetch(e.request))));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k))))));
-`;
-function registerSW(){if('serviceWorker' in navigator){const b=new Blob([SW_CODE],{type:'application/javascript'});const u=URL.createObjectURL(b);navigator.serviceWorker.register(u).catch(()=>{});}}
+function sanitizeText(t){
+  if(t == null) return '';
+  return String(t)
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/\u2013/g, '-')
+    .replace(/\u2014/g, '--')
+    .replace(/\u2026/g, '...');
+}
 
 // ============================================================
-// JT MULTI-PARTIS (intégré) — config, pipeline, player
+// JT MULTI-PARTIS (Chatons Shaolin & Wes Anderson)
 // ============================================================
-const API_BASE='https://apihub.agnes-ai.com/v1';
-const POLL_BASE='https://apihub.agnes-ai.com/agnesapi';
-const MODEL_TEXT='agnes-2.5-flash';
-const MODEL_IMAGE='agnes-image-2.1-flash';
-const MODEL_VIDEO='agnes-video-v2.0';
-const FRAME_RATE=24;
-const SCENE_COUNT=12;
-const SCENE_DURATION_FRAMES=145;
+const SCENE_COUNT = 12;
+const SCENE_DURATION_FRAMES = 145;
 
-const PARTIES=[
+const PARTIES = [
  {id:'lfi',name:'La France insoumise',emoji:'🔴',desc:'Mélenchon · Panot',rss:'https://news.google.com/rss/search?q=La+France+insoumise&hl=fr&gl=FR&ceid=FR:fr',chatBreed:'siamois',helmet:'casque de moto rétro rouge',outfit:'kimono de Shaolin rouge corail, ceinture moutarde'},
  {id:'rn',name:'Rassemblement National',emoji:'🔵',desc:'Le Pen · Bardella',rss:'https://news.google.com/rss/search?q=Rassemblement+National&hl=fr&gl=FR&ceid=FR:fr',chatBreed:'persan',helmet:'casque de moto rétro bleu marine',outfit:'kimono de Shaolin bleu marine, ceinture blanche'},
  {id:'renaissance',name:'Renaissance',emoji:'🟡',desc:'Macron · Attal',rss:'https://news.google.com/rss/search?q=Renaissance+Macron&hl=fr&gl=FR&ceid=FR:fr',chatBreed:'écossais',helmet:'casque de moto rétro doré',outfit:'kimono de Shaolin jaune pâle, ceinture bleue'},
@@ -720,7 +1266,8 @@ const PARTIES=[
  {id:'eelv',name:'Les Écologistes',emoji:'🌿',desc:'Tondelier',rss:'https://news.google.com/rss/search?q=Les+Ecologistes+Tondelier&hl=fr&gl=FR&ceid=FR:fr',chatBreed:'maine coon',helmet:'casque de moto rétro vert sauge',outfit:'kimono de Shaolin vert sauge, ceinture terre cuite'},
  {id:'pcf',name:'Parti Communiste',emoji:'⚒️',desc:'Roussel',rss:'https://news.google.com/rss/search?q=Parti+Communiste+Roussel&hl=fr&gl=FR&ceid=FR:fr',chatBreed:'angora',helmet:'casque de moto rétro rouge profond',outfit:'kimono de Shaolin rouge profond, ceinture dorée'}
 ];
-const WA_PALETTES=[
+
+const WA_PALETTES = [
  {id:'pink-mint',label:'Rose poudré & Menthe',colors:['#F4C2C2','#A8D8B9','#E5B95A','#F5F0E1','#7B9FB0']},
  {id:'coral-teal',label:'Corail & Turquoise',colors:['#E8A87C','#85CDCA','#F4E4BA','#D4A5A5','#7C6A8B']},
  {id:'mustard-blue',label:'Moutarde & Bleu ciel',colors:['#F7D794','#778BEB','#E77F67','#F1E7D0','#3B4B55']},
@@ -729,252 +1276,685 @@ const WA_PALETTES=[
  {id:'ochre-rose',label:'Ocre & Rose fané',colors:['#D9A44A','#E8B8B8','#8FAE8B','#F4E8D0','#6B5B7B']}
 ];
 
-function JTlog(msg,level){log('[JT] '+msg,level||'info');}
-function JTsetStatus(t){const b=document.getElementById('statusBar');const x=document.getElementById('statusTextBar');if(!b||!x)return;if(t){b.classList.add('visible');x.textContent=t;}else b.classList.remove('visible');}
-function JTshowToast(m,t='success',d=2500){const el=document.getElementById('toast');const i=document.getElementById('toastIcon');const x=document.getElementById('toastText');if(!el||!i||!x)return;el.classList.remove('visible','success','error','warn');void el.offsetWidth;i.textContent={success:'✓',error:'✕',warn:'⚠'}[t]||'✓';x.textContent=m;el.classList.add(t);requestAnimationFrame(()=>el.classList.add('visible'));setTimeout(()=>el.classList.remove('visible'),d);}
-function JTsleep(ms){return new Promise(r=>setTimeout(r,ms));}
-function JTesc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-
-function JTrefreshKeyPool(){const stored=JSON.parse(localStorage.getItem('movie_api_key')||'[]');if(!Array.isArray(stored))return[];state.keyPool=stored.filter(k=>typeof k==='string'&&k.trim().length>0).map(k=>({key:k.trim(),lastUsed:0,cooldownUntil:0,active:true,errorCount:0}));}
-function JThasActiveKey(){return state.keyPool.some(k=>k.active);}
-function JTgetReadyKey(){const now=Date.now();const active=state.keyPool.filter(k=>k.active);if(active.length===0)return{key:null,waitMs:0};const ready=active.filter(k=>!k.cooldownUntil||k.cooldownUntil<=now);if(ready.length===0){const soonest=active.reduce((a,b)=>(a.cooldownUntil||0)<(b.cooldownUntil||0)?a:b);return{key:null,waitMs:Math.max(1000,(soonest.cooldownUntil||0)-now)}}ready.sort((a,b)=>(a.lastUsed||0)-(b.lastUsed||0));return{key:ready[0],waitMs:0};}
-async JTacquireKey(label){while(true){if(state.stopRequested)throw new Error('Arrêt');const{key,waitMs}=JTgetReadyKey();if(key){key.lastUsed=Date.now();return key;}if(waitMs===0)throw new Error('Aucune clé');JTsetStatus('Cooldown — '+Math.round(waitMs/1000)+'s');await JTsleep(waitMs);}}
-async JTapiFetch(url,options,label,maxAttempts){
- options=options||{};maxAttempts=maxAttempts||6;
- for(let a=0;a<maxAttempts;a++){
-  if(state.stopRequested)throw new Error('Arrêt');
-  let ko;try{ko=await JTacquireKey(label);}catch(e){throw e;}
-  const h=Object.assign({},options.headers||{},{'Authorization':'Bearer '+ko.key});
-  const fo=Object.assign({},options,{headers:h});
-  try{
-   const res=await fetch(url,fo);
-   if(res.status===429){const ra=parseInt(res.headers.get('Retry-After')||'0',10)||0;ko.cooldownUntil=Date.now()+Math.max(ra,20+a*15)*1000;await JTsleep(Math.min(ra*1000,3000));continue;}
-   if(res.status===503){await JTsleep(10000);continue;}
-   if([400,401,403,404].includes(res.status)){if(res.status===401||res.status===403){ko.errorCount=(ko.errorCount||0)+1;if(ko.errorCount>=3){ko.active=false;}}const et=await res.text().catch(()=>'');throw new Error('HTTP '+res.status+' — '+et.slice(0,400));}
-   return res;
-  }catch(e){if(e.message==='Arrêt')throw e;await JTsleep(4+a*4);}
- }
- throw new Error('Tentatives épuisées');
+function JTlog(msg, level){ log('[JT] ' + msg, level || 'info'); }
+function JTsetStatus(t){
+  const b = document.getElementById('statusBar');
+  const x = document.getElementById('statusTextBar');
+  if(!b || !x) return;
+  if(t){ b.classList.add('visible'); x.textContent = t; }
+  else b.classList.remove('visible');
 }
-function JTbalanceJson(t){let ob=0,ok=0,s=false,e=false;for(let i=0;i<t.length;i++){const c=t[i];if(e){e=false;continue}if(c==='\\'){e=true;continue}if(c==='"'){s=!s;continue}if(s)continue;if(c==='{')ob++;else if(c==='}')ob--;else if(c==='[')ok++;else if(c===']')ok--}let r=t;if(s)r+='"';while(ok>0){r+=']';ok--}while(ob>0){r+='}';ob--}return r;}
-function JTrepairJson(t){if(!t)return null;let c=String(t).trim();const fm=c.match(/```(?:json)?\s*([\s\S]*?)```/);if(fm)c=fm[1].trim();const fb=c.indexOf('{');if(fb<0)return null;c=c.slice(fb);const lb=c.lastIndexOf('}');if(lb>0)c=c.slice(0,lb+1);let out='',s=false,e=false;for(let i=0;i<c.length;i++){const c2=c[i];if(e){if('"\\/bfnrtu'.includes(c2))out+='\\'+c2;else out+=c2;e=false;continue}if(c2==='\\'){e=true;continue}if(c2==='"'){s=!s;out+=c2;continue}if(s){if(c2==='\n'){out+='\\n';continue}if(c2==='\r'){out+='\\r';continue}if(c2==='\t'){out+='\\t';continue}const cd=c2.charCodeAt(0);if(cd<32){out+='\\u'+cd.toString(16).padStart(4,'0');continue}}out+=c2}if(e)out+='\\';if(s)out+='"';out=out.replace(/,\s*([}\]])/g,'$1');return out;}
-function JTextractJson(t){const r=JTrepairJson(t);if(!r)return null;try{return JSON.parse(r)}catch(e1){try{return JSON.parse(JTbalanceJson(r))}catch(e2){return null;}}}
-function JTdecodeCompositeId(c){if(!c||typeof c!=='string'||!c.startsWith('video_'))return null;let b=c.slice(6);while(b.length%4)b+='=';try{const d=atob(b);const m=d.match(/video_id:([^;]+)/);if(m&&m[1])return m[1].trim();}catch(e){}return null;}
-function JTbuildIdCandidates(v){const ids=[];if(typeof v==='string'){ids.push({label:'composite',value:v});const i=JTdecodeCompositeId(v);if(i&&i!==v)ids.push({label:'inner',value:i});}else if(v&&typeof v==='object'){if(v.compositeId)ids.push({label:'composite',value:v.compositeId});if(v.innerId)ids.push({label:'inner',value:v.innerId});const r=v.raw||{};for(const f of['id','task_id','request_id']){if(r[f]&&!ids.some(x=>x.value===r[f]))ids.push({label:'raw.'+f,value:r[f]});}}const seen=new Set();return ids.filter(x=>{if(seen.has(x.value))return false;seen.add(x.value);return true;});}
-const JT_POLL_BUILDERS=[
- {name:'agnesapi',build:id=>POLL_BASE+'?video_id='+encodeURIComponent(id)+'&model_name='+encodeURIComponent(MODEL_VIDEO)},
- {name:'v1-rest',build:id=>API_BASE+'/videos/'+encodeURIComponent(id)},
- {name:'v1-rest-status',build:id=>API_BASE+'/videos/'+encodeURIComponent(id)+'/status'},
- {name:'v1-rest-model',build:id=>API_BASE+'/videos/'+encodeURIComponent(id)+'?model_name='+encodeURIComponent(MODEL_VIDEO)}
-];
-async JTpollVideo(vidObj,onProg){
- const cands=JTbuildIdCandidates(vidObj);if(cands.length===0)throw new Error('Aucun ID');
- let rem=Math.min(60,Math.max(40,Math.floor(90*0.7)));while(rem>0){if(state.stopRequested)throw new Error('Arrêt');onProg('Préparation — '+rem+'s');await JTsleep(1000);rem--;}
- let working={builder:state.workingPollUrlBuilder||null,id:null};
- for(let a=0;a<MAX_POLL_ATTEMPTS;a++){
-  if(state.stopRequested)throw new Error('Arrêt');
-  if(a>0){const idx=Math.min(a-1,[8,8,12,12,20,20,25].length-1);let rr=[8,8,12,12,20,20,25][idx];while(rr>0){if(state.stopRequested)throw new Error('Arrêt');onProg('Création — '+rr+'s');await JTsleep(1000);rr--;}}
-  const apps=[];if(working.builder&&working.id)apps.push({builder:working.builder,id:working.id});
-  for(const b of JT_POLL_BUILDERS)for(const c of cands){if(!apps.some(x=>x.builder===b&&x.id===c.value))apps.push({builder:b,id:c.value});}
-  let got=false,le=null;
-  for(const ap of apps){
-   if(state.stopRequested)throw new Error('Arrêt');
-   try{
-    const res=await JTapiFetch(ap.builder.build(ap.id),{method:'GET'},'Polling',2);
-    const d=await res.json();
-    if(!working.builder){working.builder=ap.builder;working.id=ap.id;state.workingPollUrlBuilder=ap.builder;}
-    got=true;
-    const st=d.status||'unknown';
-    if(st==='completed'||st==='success'||st==='succeeded'||d.video_url){const u=d.video_url||d.url||d.videoUrl||(d.metadata&&d.metadata.url);if(!u)throw new Error('Pas d\'URL');return u;}
-    if(st==='failed'||st==='error')throw new Error('Échec ('+st+')');
-    break;
-   }catch(e){if(e.message==='Arrêt')throw e;le=e;if(e.status===404)continue;if(e.status===401||e.status===403)continue;break;}
+function JTsleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+function JTesc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function JThasActiveKey(){ return state.keyPool.some(k => k.active); }
+function JTgetReadyKey(){
+  const now = Date.now();
+  const active = state.keyPool.filter(k => k.active);
+  if(active.length === 0) return { key: null, waitMs: 0 };
+  const ready = active.filter(k => !k.cooldownUntil || k.cooldownUntil <= now);
+  if(ready.length === 0){
+    const soonest = active.reduce((a, b) => (a.cooldownUntil || 0) < (b.cooldownUntil || 0) ? a : b);
+    return { key: null, waitMs: Math.max(1000, (soonest.cooldownUntil || 0) - now) };
   }
-  if(!got&&le)JTlog('Poll itération '+a+' : '+le.message,'warn');
- }
- throw new Error('Délai dépassé');
+  ready.sort((a, b) => (a.lastUsed || 0) - (b.lastUsed || 0));
+  return { key: ready[0], waitMs: 0 };
 }
 
-function JTpickPalette(){return WA_PALETTES[Math.floor(Math.random()*WA_PALETTES.length)];}
-function JTbuildScriptPrompt(news,palette){
- const pstr=palette.colors.join(', ');
- const nb=news.map((n,i)=>(i+1)+'. ['+n.partyName+'] « '+n.title+' »').join('\n');
- return [
- 'Tu es scénariste et réalisateur d\'un JOURNAL TÉLÉVISÉ CINÉMATOGRAPHIQUE MULTI-PARTIS de 60 à 80 secondes, STYLE WES ANDERSON STRICT.',
- 'Structure : OUVERTURE PLATEAU → 10 REPORTAGES → CONCLUSION PLATEAU.',
- '',
- 'SUJETS :',
- nb,
- '',
- 'STYLE WES ANDERSON : symétrie bilatérale parfaite, personnages centrés, caméra perpendiculaire, pellicule 35mm grain. MONTAGE : chaque scène = 4 à 6 plans avec cuts francs. CAMÉRA : locked-off, slow dolly-in, whip pan. COULEURS : palette pastel coordonnée.',
- '',
- 'PERSONNAGES : CHATONS KUNG-FU — petits chatons anthropomorphes, tête kawaii sur corps humain, casque de moto rétro + tenue de SHAOLIN. Expressions DEADPAN.',
- '',
- 'PRÉSENTATEUR : une seule fois, identique scènes 1 et 12. NEUTRE.',
- 'REPORTERS : affiliés au parti du sujet, couleurs du parti.',
- '',
- 'PALETTE : '+palette.label+' → '+pstr,
- '',
- 'DIALOGUES : chaque scène DOIT avoir dialogue.line_fr EN FRANÇAIS, 6 à 12 mots.',
- '',
- 'FORMAT JSON STRICT : clés entre guillemets doubles, pas de markdown.',
- '',
- '{',
- '  "title": "titre court",',
- '  "logline": "résumé",',
- '  "presenter": {"name":"Prénom","cat_face":"race neutre","helmet":"casque neutre","outfit":"kimono neutre","physical_description":"cute kitten"},',
- '  "recurring_elements":{"motifs":["m1","m2"],"decor_style":"studio rétro symétrique"},',
- '  "scenes": [{"scene_number":1,"type":"plateau","party_id":"neutral","party_name":"Neutre","character":{"name":"Nom","cat_face":"race","helmet":"casque","outfit":"kimono","physical_description":"kitten"},"decor":"studio","action":"parle","shots":[{"shot_number":1,"camera":{"type":"wide","movement":"locked-off","framing":"centered"},"description":"shot","duration_seconds":2}],"dialogue":{"speaker":"Nom","line_fr":"Bonsoir, voici les titres."},"text_overlay_fr":"JT MULTI-PARTIS","duration_seconds":8}],',
- '}',
- '',
- 'Chaque scène a 4 à 6 plans dans "shots".'
- ].join('\n');
+async function JTacquireKey(label){
+  while(true){
+    if(state.stopRequested) throw new Error('Arrêt');
+    const {key, waitMs} = JTgetReadyKey();
+    if(key){ key.lastUsed = Date.now(); return key; }
+    if(waitMs === 0) throw new Error('Aucune clé active disponible');
+    JTsetStatus('Pause Cooldown API — ' + Math.round(waitMs / 1000) + 's');
+    await JTsleep(waitMs);
+  }
 }
-function JTbuildVideoPrompt(scene,script,palette){
- const p=script.presenter||{};const ch=scene.character||{};
- const name=ch.name||p.name||'Personnage';
- const desc=ch.physical_description||p.physical_description||'cute kawaii humanoid kitten';
- const plateau=(scene.type==='plateau'||scene.scene_number===1||scene.scene_number===12);
- const motifs=(script.recurring_elements&&script.recurring_elements.motifs)?script.recurring_elements.motifs.join(', '):'';
- const decorStyle=(script.recurring_elements&&script.recurring_elements.decor_style)?script.recurring_elements.decor_style:'symmetric studio';
- const line=scene.dialogue&&scene.dialogue.line_fr?scene.dialogue.line_fr:'';
- const shots=Array.isArray(scene.shots)?scene.shots:[];
- let mb='';
- if(shots.length){mb='MONTAGE — '+shots.length+' SHOTS:\n'+shots.map((sh,i)=>{const c=sh.camera||{};return '  SHOT '+(i+1)+' — '+(c.type||'wide')+' / '+(c.movement||'locked-off')+' / '+(c.framing||'centered')+' : '+(sh.description||'')}).join('\n');}else{mb='MONTAGE — 5 SYMMETRIC SHOTS.'}
- return [
- 'WES ANDERSON CINEMATIC NEWS — 35MM FILM.',
- 'Perfect bilateral symmetry, dead-center framing, planimetric staging.',
- 'HARD CUTS between shots. 35mm film grain, warm halation.',
- 'PALETTE : '+palette.label+' → '+palette.colors.join(', ')+'.',
- 'CHARACTERS — KUNG FU KITTENS : cute kawaii humanoid kitten, retro motorcycle helmet, SHAOLIN outfit. DEADPAN.',
- plateau?'PRESENTER — SAME AS SCENES 1 AND 12 :':'REPORTER — UNIQUE CHARACTER :',
- '  '+name+' — '+desc,
- motifs?'MOTIFS : '+motifs:'',
- 'SET : '+decorStyle,
- 'SCENE '+(scene.scene_number||'?')+' — '+(scene.type||'scene').toUpperCase()+(scene.party_name?' — '+scene.party_name:''),
- 'DECOR : '+(scene.decor||''),
- 'ACTION : '+(scene.action||''),
- line?'SPOKEN LINE (French) : "'+line+'"':'',
- mb,
- 'No text, no subtitles, no watermarks.'
- ].filter(Boolean).join('\n');
+
+async function JTapiFetch(url, options, label, maxAttempts=5){
+  options = options || {};
+  for(let a = 0; a < maxAttempts; a++){
+    if(state.stopRequested) throw new Error('Arrêt');
+    let ko;
+    try { ko = await JTacquireKey(label); } catch(e){ throw e; }
+    const h = Object.assign({}, options.headers || {}, { 'Authorization': 'Bearer ' + ko.key });
+    const fo = Object.assign({}, options, { headers: h });
+    try {
+      const res = await fetch(url, fo);
+      if(res.status === 429){
+        const ra = parseInt(res.headers.get('Retry-After') || '0', 10) || 0;
+        ko.cooldownUntil = Date.now() + Math.max(ra, 20 + a * 15) * 1000;
+        await JTsleep(Math.min(ra * 1000, 3000));
+        continue;
+      }
+      if(res.status === 503){
+        await JTsleep(10000);
+        continue;
+      }
+      if([400, 401, 403, 404].includes(res.status)){
+        if(res.status === 401 || res.status === 403){
+          ko.errorCount = (ko.errorCount || 0) + 1;
+          if(ko.errorCount >= 3) ko.active = false;
+        }
+        const et = await res.text().catch(() => '');
+        throw new Error('HTTP ' + res.status + ' — ' + et.slice(0, 300));
+      }
+      return res;
+    } catch(e){
+      if(e.message === 'Arrêt') throw e;
+      await JTsleep(3000 + a * 3000);
+    }
+  }
+  throw new Error('Tentatives épuisées pour ' + label);
 }
-function JTshorten(t,max){max=max||90;if(!t)return '';let x=String(t).trim();if(x.length<=max)return x;x=x.slice(0,max);const ls=x.lastIndexOf(' ');x=ls>20?x.slice(0,ls).trim():x.trim();return x.replace(/[,;:.\-–—]+$/,'')+'.';}
-function JTfallbackScript(news,palette){
- const pres={name:'Élise Moreau',cat_face:'siamoise',helmet:'casque chromé',outfit:'kimono crème',physical_description:'cute kawaii humanoid kitten'};
- const shots=()=>[
-  {shot_number:1,camera:{type:'wide',movement:'locked-off',framing:'centered'},description:'wide',duration_seconds:2},
-  {shot_number:2,camera:{type:'medium',movement:'slow dolly-in',framing:'centered'},description:'medium',duration_seconds:2},
-  {shot_number:3,camera:{type:'close-up',movement:'locked-off',framing:'centered'},description:'close-up',duration_seconds:2},
-  {shot_number:4,camera:{type:'champ-contrechamp',movement:'locked-off',framing:'centered'},description:'reverse',duration_seconds:2},
-  {shot_number:5,camera:{type:'insert',movement:'locked-off',framing:'close-up'},description:'insert',duration_seconds:2}
- ];
- const scenes=[];
- scenes.push({scene_number:1,type:'plateau',party_id:'neutral',party_name:'Neutre',character:{...pres},decor:'studio rétro pastel',action:'parle',shots:shots(),dialogue:{speaker:pres.name,line_fr:'Bonsoir, voici les titres.'},text_overlay_fr:'JT MULTI-PARTIS',duration_seconds:8});
- news.slice(0,10).forEach((n,i)=>{const party=PARTIES.find(p=>p.id===n.partyId)||PARTIES[0];const rep={name:'Reporter '+party.name,cat_face:party.chatBreed,helmet:party.helmet,outfit:party.outfit,physical_description:'kitten '+party.chatBreed};scenes.push({scene_number:i+2,type:'reportage',party_id:n.partyId,party_name:party.name,character:rep,decor:'set '+party.name,action:'parle',shots:shots(),dialogue:{speaker:rep.name,line_fr:JTshorten(n.title,90)},text_overlay_fr:(n.title||'').toUpperCase().slice(0,60),duration_seconds:8});});
- scenes.push({scene_number:12,type:'plateau',party_id:'neutral',party_name:'Neutre',character:{...pres},decor:'studio rétro pastel',action:'parle',shots:shots(),dialogue:{speaker:pres.name,line_fr:'Merci, bonne soirée.'},text_overlay_fr:'FIN',duration_seconds:8});
- return {title:'JT Multi-Partis',logline:'JT cinématographique.',presenter:pres,recurring_elements:{motifs:['micro','carte'],decor_style:'studio rétro'},scenes};
+
+function JTpickPalette(){ return WA_PALETTES[Math.floor(Math.random() * WA_PALETTES.length)]; }
+
+function JTrenderParties(){
+  const g = document.getElementById('partiesGridJT');
+  if(!g) return;
+  g.innerHTML = PARTIES.map(p => 
+    '<div class="party-card' + (state.selectedParties.has(p.id) ? ' selected' : '') + '" data-party="' + p.id + '">' +
+    '<div class="party-emoji">' + p.emoji + '</div>' +
+    '<div class="party-name">' + JTesc(p.name) + '</div>' +
+    '<div class="party-desc">' + JTesc(p.desc) + '</div></div>'
+  ).join('');
+
+  g.querySelectorAll('.party-card').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.party;
+      if(state.selectedParties.has(id)){
+        if(state.selectedParties.size > 1) state.selectedParties.delete(id);
+        else showToast('Gardez au moins 1 parti politique', 'warn');
+      } else {
+        if(state.selectedParties.size < 5) state.selectedParties.add(id);
+        else showToast('Maximum 5 partis sélectionnés', 'warn');
+      }
+      JTrenderParties();
+      JTupdateButtons();
+    });
+  });
+  document.getElementById('partiesCountJT').textContent = state.selectedParties.size + ' sélectionné' + (state.selectedParties.size > 1 ? 's' : '');
 }
-function JTnormalizeScript(s,news){
- if(!s||!s.scenes||!Array.isArray(s.scenes))return null;
- if(!s.presenter||!s.presenter.name)s.presenter={name:'Élise Moreau',cat_face:'siamoise',helmet:'casque',outfit:'kimono',physical_description:'kitten'};
- if(!s.recurring_elements)s.recurring_elements={motifs:[],decor_style:'studio rétro'};
- s.scenes=s.scenes.slice(0,SCENE_COUNT);
- s.scenes.forEach((sc,i)=>{
-  if(sc.party_id===undefined)sc.party_id=(i>=1&&i<=10)?(news[i-1]?news[i-1].partyId:'neutral'):'neutral';
-  if(sc.party_name===undefined)sc.party_name=(i>=1&&i<=10)?(news[i-1]?news[i-1].partyName:'Neutre'):'Neutre';
-  if(!sc.character||!sc.character.name){if(sc.type==='plateau'||sc.scene_number===1||sc.scene_number===12){sc.character={...s.presenter}}else{const p=PARTIES.find(x=>x.id===sc.party_id)||PARTIES[0];sc.character={name:'Reporter '+p.name,cat_face:p.chatBreed,helmet:p.helmet,outfit:p.outfit,physical_description:'kitten '+p.chatBreed};}}
-  if(!Array.isArray(sc.shots)||sc.shots.length<4)sc.shots=[{shot_number:1,camera:{type:'wide',movement:'locked-off',framing:'centered'},description:'wide',duration_seconds:2},{shot_number:2,camera:{type:'medium',movement:'slow dolly-in',framing:'centered'},description:'medium',duration_seconds:2},{shot_number:3,camera:{type:'close-up',movement:'locked-off',framing:'centered'},description:'close-up',duration_seconds:2},{shot_number:4,camera:{type:'reverse',movement:'locked-off',framing:'centered'},description:'reverse',duration_seconds:2},{shot_number:5,camera:{type:'insert',movement:'locked-off',framing:'close-up'},description:'insert',duration_seconds:2}];
-  if(!sc.dialogue||!sc.dialogue.line_fr){const nw=news.find(x=>x.partyId===sc.party_id);let fl;if(sc.type==='plateau'&&sc.scene_number===1)fl='Bonsoir, voici les titres.';else if(sc.type==='plateau')fl='Merci, bonne soirée.';else if(nw)fl=JTshorten(nw.title,90);else fl='Reportage.';sc.dialogue={speaker:(sc.character&&sc.character.name)||'Présentateur',line_fr:fl};}
- });
- return s;
+
+function JTrenderNews(){
+  const c = document.getElementById('newsContainerJT');
+  if(!c) return;
+  if(Object.keys(state.partyNews).length === 0){
+    c.innerHTML = '<div style="padding:1rem;text-align:center;color:var(--dim);">Cliquez sur « Lancer le JT MOVIE » ou « Recharger les flux RSS » pour charger les actualités.</div>';
+    return;
+  }
+  let h = '';
+  Object.entries(state.partyNews).forEach(([pid, news]) => {
+    const party = PARTIES.find(p => p.id === pid);
+    if(!party) return;
+    h += '<div class="party-news-block"><div class="party-news-header">' + party.emoji + ' ' + JTesc(party.name) + '</div><div class="news-list">';
+    news.forEach(n => {
+      const sel = state.selectedNews.some(s => s.title === n.title && s.partyId === pid);
+      h += '<div class="news-item"><div class="news-check' + (sel ? ' checked' : '') + '" data-t="' + JTesc(n.title) + '" data-p="' + pid + '">' + (sel ? '✓' : '') + '</div><div style="flex:1;"><div class="news-title">' + JTesc(n.title) + '</div><div class="news-src">' + JTesc(n.source || '') + '</div></div></div>';
+    });
+    h += '</div></div>';
+  });
+  c.innerHTML = h;
+  c.querySelectorAll('.news-check').forEach(el => {
+    el.addEventListener('click', () => {
+      const t = el.dataset.t, pid = el.dataset.p;
+      const idx = state.selectedNews.findIndex(s => s.title === t && s.partyId === pid);
+      if(idx >= 0) state.selectedNews.splice(idx, 1);
+      else {
+        if(state.selectedNews.length >= 10){
+          showToast('10 sujets maximum', 'warn');
+          return;
+        }
+        const p = PARTIES.find(x => x.id === pid);
+        state.selectedNews.push({ title: t, partyId: pid, partyName: p ? p.name : pid });
+      }
+      JTrenderNews();
+      JTupdateButtons();
+    });
+  });
+  document.getElementById('newsBadgeJT').textContent = state.selectedNews.length + ' sélectionné' + (state.selectedNews.length > 1 ? 's' : '');
 }
-async JTcallChat(system,user,label,maxTokens,temp){
- const body={model:MODEL_TEXT,messages:[{role:'system',content:sanitizeText(system)},{role:'user',content:sanitizeText(user)}],temperature:typeof temp==='number'?temp:0.7,max_tokens:maxTokens||32000,reasoning_effort:'none',chat_template_kwargs:{enable_thinking:false}};
- const res=await JTapiFetch(API_BASE+'/chat/completions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)},label,4);
- const d=await res.json();const c=d.choices&&d.choices[0];const m=c&&c.message;let content=m&&m.content;if(!content&&m&&m.reasoning_content)content=m.reasoning_content;return content;}
-function sanitizeText(t){if(t==null)return '';return String(t).replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/\u2013/g,'-').replace(/\u2014/g,'--').replace(/\u2026/g,'...');}
 
-// JT UI
-function JTrenderParties(){const g=document.getElementById('partiesGridJT');if(!g)return;g.innerHTML=PARTIES.map(p=>'<div class="party-card'+(state.selectedParties.has(p.id)?' selected':'')+'" data-party="'+p.id+'"><div class="party-emoji">'+p.emoji+'</div><div class="party-name">'+JTesc(p.name)+'</div><div class="party-desc">'+JTesc(p.desc)+'</div></div>').join('');g.querySelectorAll('.party-card').forEach(el=>{el.addEventListener('click',()=>{const id=el.dataset.party;if(state.selectedParties.has(id)){if(state.selectedParties.size>1)state.selectedParties.delete(id);else JTshowToast('Gardez au moins 1 parti','warn');}else{if(state.selectedParties.size<5)state.selectedParties.add(id);else JTshowToast('Max 5 partis','warn');}JTrenderParties();JTupdateButtons();});});document.getElementById('partiesCountJT').textContent=state.selectedParties.size+' sélectionné'+(state.selectedParties.size>1?'s':'');}
-function JTrenderNews(){const c=document.getElementById('newsContainerJT');if(!c)return;if(Object.keys(state.partyNews).length===0){c.innerHTML='<div style="padding:1rem;text-align:center;color:var(--dim);">Cliquez sur « Lancer le JT MOVIE » pour charger les news.</div>';return;}let h='';Object.entries(state.partyNews).forEach(([pid,news])=>{const party=PARTIES.find(p=>p.id===pid);if(!party)return;h+='<div class="party-news-block"><div class="party-news-header">'+party.emoji+' '+JTesc(party.name)+'</div><div class="news-list">';news.forEach(n=>{const sel=state.selectedNews.some(s=>s.title===n.title&&s.partyId===pid);h+='<div class="news-item"><div class="news-check'+(sel?' checked':'')+'" data-t="'+JTesc(n.title)+'" data-p="'+pid+'">'+(sel?'✓':'')+'</div><div style="flex:1;"><div class="news-title">'+JTesc(n.title)+'</div><div class="news-src">'+JTesc(n.source||'')+'</div></div></div>';});h+='</div></div>';});c.innerHTML=h;c.querySelectorAll('.news-check').forEach(el=>{el.addEventListener('click',()=>{const t=el.dataset.t,pid=el.dataset.p;const idx=state.selectedNews.findIndex(s=>s.title===t&&s.partyId===pid);if(idx>=0)state.selectedNews.splice(idx,1);else{if(state.selectedNews.length>=10){JTshowToast('Max 10 sujets','warn');return}const p=PARTIES.find(x=>x.id===pid);state.selectedNews.push({title:t,partyId:pid,partyName:p?p.name:pid});}JTrenderNews();JTupdateButtons();});});document.getElementById('newsBadgeJT').textContent=state.selectedNews.length+' sélectionné'+(state.selectedNews.length>1?'s':'');}
-function JTrenderScript(){const v=document.getElementById('scriptViewJT');if(!v)return;if(!state.script){v.textContent='Le scénario apparaîtra ici…';return;}const s=state.script,pres=s.presenter||{};let h='<div class="script-title">📖 '+JTesc(s.title||'Sans titre')+'</div><div class="script-logline">'+JTesc(s.logline||'')+'</div><div class="script-meta">🎙️ <strong style="color:var(--acc);">'+JTesc(pres.name||'—')+'</strong><br>'+(pres.cat_face?'🐱 '+JTesc(pres.cat_face)+'<br>':'')+(pres.helmet?'🪖 '+JTesc(pres.helmet)+'<br>':'')+(pres.outfit?'👔 '+JTesc(pres.outfit)+'<br>':'')+(state.palette?'🎨 '+JTesc(state.palette.label):'')+'</div>';(s.scenes||[]).forEach((sc,i)=>{const ch=sc.character||{};h+='<div class="script-scene"><div class="sc-head">🎬 Scène '+(sc.scene_number||(i+1))+' · '+(sc.type||'').toUpperCase()+(sc.party_name&&sc.party_name!=='Neutre'?' · '+JTesc(sc.party_name):'')+'</div>';if(ch.name)h+='<div class="sc-line sc-character"><span class="sc-label">🐱 Chat</span><strong>'+JTesc(ch.name)+'</strong>'+(ch.cat_face?' — '+JTesc(ch.cat_face):'')+'</div>';if(sc.decor)h+='<div class="sc-line"><span class="sc-label">Décor</span>'+JTesc(sc.decor)+'</div>';if(Array.isArray(sc.shots)&&sc.shots.length){h+='<div class="sc-shots">🎞️ <strong>'+sc.shots.length+' plans :</strong><br>';sc.shots.forEach((sh,si)=>{const c=sh.camera||{};h+='&nbsp;&nbsp;• Plan '+(si+1)+' : '+(c.type||'?')+' / '+(c.movement||'?')+' — '+JTesc(sh.description||'')+'<br>';});h+='</div>';}if(sc.dialogue&&sc.dialogue.line_fr)h+='<div class="sc-line sc-dialogue"><span class="sc-label">🔊 Voix</span><strong>'+JTesc(sc.dialogue.speaker||'')+'</strong> — « '+JTesc(sc.dialogue.line_fr)+' »</div>';h+='</div>';});v.innerHTML=h;document.getElementById('scriptBadgeJT').textContent=(s.scenes||[]).length+' scènes';}
-function JTrenderVideos(){const g=document.getElementById('videosGridJT');if(!g)return;while(g.children.length>state.videos.length)g.removeChild(g.lastChild);for(let i=g.children.length;i<state.videos.length;i++){const card=document.createElement('div');card.className='scene-card';card.dataset.index=String(i);card.innerHTML='<div class="scene-card-header"><span class="scene-card-title">🎬 Scène '+(i+1)+'</span><span class="scene-card-status"></span></div><div class="scene-card-body"></div>';g.appendChild(card);}state.videos.forEach((v,i)=>{const card=g.children[i];if(!card)return;const st=card.querySelector('.scene-card-status'),bd=card.querySelector('.scene-card-body');const cls='scene-card '+(v.status==='done'?'done':v.status==='error'?'error':(v.status==='loading')?'generating':'');if(card.className!==cls)card.className=cls;if(v.status==='done'&&v.url){if(card.dataset.url!==v.url){st.innerHTML='<span style="color:var(--ok);">✓</span>';bd.innerHTML='';const vid=document.createElement('video');vid.src=v.url;vid.controls=true;vid.setAttribute('playsinline','');bd.appendChild(vid);const a=document.createElement('a');a.className='scene-download';a.href=v.url;a.target='_blank';a.rel='noopener noreferrer';a.download='scene-'+(i+1)+'.mp4';a.textContent='⬇ Télécharger';bd.appendChild(a);card.dataset.url=v.url;}}else if(v.status==='error'){st.innerHTML='<span style="color:var(--err);">✕</span>';bd.innerHTML='<div class="scene-placeholder" style="color:var(--err);">Erreur : '+JTesc(v.error||'inconnue')+'</div>';}else{st.innerHTML='<span class="spinner-mini"></span>';bd.innerHTML='<div class="scene-placeholder"><div class="spinner-mini"></div><span>'+JTesc(v.progress||'En attente…')+'</span></div>';}});document.getElementById('videosCountJT').textContent=state.videos.filter(x=>x.status==='done').length+'/'+state.videos.length;}
-function JTupdateButtons(){const launch=document.getElementById('launchJT'),stop=document.getElementById('stopJT'),play=document.getElementById('playFilmJT'),replay=document.getElementById('replayJT');const hk=JThasActiveKey();const hn=state.selectedNews.length>0;const hv=state.videos.filter(x=>x.status==='done').length>0;if(launch){launch.disabled=!hk||state.isRunning;if(!hk)launch.innerHTML='🔑 Ajoutez une clé API';else if(state.isRunning)launch.innerHTML='⏳ JT en cours…';else if(!hn)launch.innerHTML='📰 Sélectionnez des sujets';else launch.innerHTML='▶ Lancer le JT MOVIE ('+state.selectedNews.length+' sujets)';}if(stop)stop.classList.toggle('visible',state.isRunning);if(play)play.disabled=!hv||state.isPlayingFilm||state.isRunning;if(replay)replay.disabled=!hv||state.isPlayingFilm||state.isRunning;document.getElementById('playerBadgeJT').textContent=state.videos.filter(x=>x.status==='done').length;}
+function JTrenderScript(){
+  const v = document.getElementById('scriptViewJT');
+  if(!v) return;
+  if(!state.script){
+    v.textContent = 'Le scénario apparaîtra ici…';
+    return;
+  }
+  const s = state.script, pres = s.presenter || {};
+  let h = '<div class="script-title">📖 ' + JTesc(s.title || 'Sans titre') + '</div>' +
+          '<div class="script-logline">' + JTesc(s.logline || '') + '</div>' +
+          '<div class="script-meta">🎙️ <strong style="color:var(--acc);">' + JTesc(pres.name || 'Présentateur') + '</strong><br>' +
+          (pres.cat_face ? '🐱 ' + JTesc(pres.cat_face) + '<br>' : '') +
+          (pres.helmet ? '🪖 ' + JTesc(pres.helmet) + '<br>' : '') +
+          (pres.outfit ? '🥋 ' + JTesc(pres.outfit) + '<br>' : '') +
+          (state.palette ? '🎨 ' + JTesc(state.palette.label) : '') + '</div>';
 
-// JT Pipeline
-async JTloadAllNews(){
- const parties=Array.from(state.selectedParties);JTlog('Chargement news pour '+parties.length+' parti(s)','news');JTsetStatus('Chargement des news…');state.partyNews={};
- for(const pid of parties){const party=PARTIES.find(p=>p.id===pid);if(!party)continue;try{const it=await JTfetchPartyNews(party);state.partyNews[pid]=it.slice(0,5);JTlog(party.emoji+' '+party.name+' : '+it.length+' news','news');}catch(e){JTlog('Erreur '+party.name+' : '+e.message,'error');}}
- state.selectedNews=[];parties.forEach(pid=>{const nw=state.partyNews[pid]||[];nw.slice(0,2).forEach(n=>{if(state.selectedNews.length<10){const p=PARTIES.find(x=>x.id===pid);state.selectedNews.push({title:n.title,partyId:pid,partyName:p.name});}});});
- JTrenderNews();JTsetStatus(null);JTshowToast(state.selectedNews.length+' sujets sélectionnés','success');}
-async JTfetchPartyNews(party){
- const methods=[{n:'rss2json',f:()=>JTrss2json(party.rss)},{n:'allorigins',f:()=>JTallOrigins(party.rss)},{n:'codetabs',f:()=>JTcodeTabs(party.rss)}];
- for(const m of methods){try{const it=await m.f();if(it&&it.length>0){JTlog(party.id+' : '+it.length+' via '+m.n,'news');return it;}}catch(e){JTlog(party.id+' : '+m.n+' → '+e.message,'warn');}}
- return [{title:'Actualité '+party.name+' (démo)',source:'Démo',rank:1},{title:'Autre '+party.name+' (démo)',source:'Démo',rank:2}];}
-async JTrss2json(u){const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(u));if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();if(d.status!=='ok')throw new Error(d.status);return(d.items||[]).map((it,i)=>({title:it.title||'',source:it.author||'Google News',rank:i+1}));}
-async JTallOrigins(u){const r=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(u));if(!r.ok)throw new Error('HTTP '+r.status);return JTparseRss(await r.text());}
-async JTcodeTabs(u){const r=await fetch('https://api.codetabs.com/v1/proxy/?quest='+encodeURIComponent(u));if(!r.ok)throw new Error('HTTP '+r.status);return JTparseRss(await r.text());}
-function JTparseRss(t){const p=new DOMParser();const x=p.parseFromString(t,'text/xml');const it=x.querySelectorAll('item');const out=[];it.forEach((e,i)=>{if(i>=25)return;const ti=e.querySelector('title')?.textContent||'';const so=e.querySelector('source')?.textContent||'';if(ti)out.push({title:ti,source:so,rank:i+1});});return out;}
-async JTgenerateImage(prompt){const body={model:MODEL_IMAGE,prompt:sanitizeText(prompt),n:1,size:'1K',ratio:'16:9'};const res=await JTapiFetch(API_BASE+'/images/generations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)},'Image',4);const d=await res.json();const it=d.data&&d.data[0];if(!it)throw new Error('Pas d\'image');if(it.url)return it.url;if(it.b64_json)return 'data:image/png;base64,'+it.b64_json;throw new Error('Format inconnu');}
-async JTcreateVideoTask(prompt,imageUrl,dur){const body={model:MODEL_VIDEO,prompt:sanitizeText(prompt),num_frames:dur,frame_rate:FRAME_RATE};if(imageUrl)body.image=imageUrl;const res=await JTapiFetch(API_BASE+'/videos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)},'Video Task',4);const d=await res.json();const cid=d.video_id||d.id||d.task_id;if(!cid)throw new Error('Pas de video_id');const inner=JTdecodeCompositeId(cid);return{compositeId:cid,innerId:inner,raw:d};}
-async JTgenerateAllVideos(script,palette){state.isGeneratingVideos=true;state.videos=[];const scenes=(script.scenes||[]).slice(0,SCENE_COUNT);scenes.forEach(()=>state.videos.push({status:'pending',url:null,type:'scene',progress:'En attente…'}));JTrenderVideos();const wc=Math.max(1,state.keyPool.filter(k=>k.active).length);JTlog('Lancement '+wc+' worker(s) sur '+scenes.length+' scènes','video');const queue=scenes.map((s,i)=>({scene:s,index:i}));const workers=[];for(let w=0;w<wc;w++)workers.push(JTvideoWorker(w,queue,script,palette));await Promise.all(workers);state.isGeneratingVideos=false;JTupdateButtons();JTlog('Bilan : '+state.videos.filter(x=>x.status==='done').length+'/'+scenes.length+' prêtes',state.videos.filter(x=>x.status==='done').length>0?'success':'warn');}
-async JTvideoWorker(wid,queue,script,palette){while(queue.length>0&&!state.stopRequested){const t=queue.shift();if(!t)break;await JTgenerateOneVideo(t.scene,t.index,script,palette,wid);}}
-async JTgenerateOneVideo(scene,idx,script,palette,wid){if(state.stopRequested)return;const prompt=JTbuildVideoPrompt(scene,script,palette);state.videos[idx].status='loading';state.videos[idx].progress='Initialisation…';JTrenderVideos();JTlog('W'+(wid+1)+' → Scène '+(idx+1)+' : « '+(scene.dialogue&&scene.dialogue.line_fr?scene.dialogue.line_fr:'').slice(0,40)+'… »','video');try{let vid=null;try{vid=await JTcreateVideoTask(prompt,null,SCENE_DURATION_FRAMES);}catch(e){if(e.status===400||/image/i.test(e.message||'')){JTlog('W'+(wid+1)+' : text-to-video refusé → image','warn');const img=await JTgenerateImage(JTbuildImagePrompt(scene,script,palette));vid=await JTcreateVideoTask(prompt,img,SCENE_DURATION_FRAMES);}else throw e;}const url=await JTpollVideo(vid,p=>{state.videos[idx].progress=p;JTrenderVideos();});state.videos[idx]={status:'done',url:url,prompt:prompt,type:scene.type||'scene'};JTrenderVideos();JTlog('W'+(wid+1)+' → Scène '+(idx+1)+' prête ✓','success');}catch(e){if(e.message==='Arrêt')return;state.videos[idx]={status:'error',url:null,prompt,type:scene.type||'scene',error:e.message};JTrenderVideos();JTlog('W'+(wid+1)+' → Scène '+(idx+1)+' échouée : '+e.message,'error');}}
-function JTbuildImagePrompt(scene,script,palette){const ch=scene.character||{};return ['Wes Anderson keyframe, 35mm film, pastel palette.','Perfect bilateral symmetry.','PALETTE : '+palette.colors.join(', ')+'.','CHARACTER : '+(ch.physical_description||'cute kitten'),'SCENE : '+(scene.decor||'')+' — '+(scene.action||''),'No text. 16:9.'].join('\n');}
+  (s.scenes || []).forEach((sc, i) => {
+    const ch = sc.character || {};
+    h += '<div class="script-scene"><div class="sc-head">🎬 Scène ' + (sc.scene_number || (i + 1)) + ' · ' + (sc.type || '').toUpperCase() + (sc.party_name && sc.party_name !== 'Neutre' ? ' · ' + JTesc(sc.party_name) : '') + '</div>';
+    if(ch.name) h += '<div class="sc-line sc-character"><span class="sc-label">🐱 Reporter</span><strong>' + JTesc(ch.name) + '</strong>' + (ch.cat_face ? ' — ' + JTesc(ch.cat_face) : '') + '</div>';
+    if(sc.decor) h += '<div class="sc-line"><span class="sc-label">Décor</span>' + JTesc(sc.decor) + '</div>';
+    if(Array.isArray(sc.shots) && sc.shots.length){
+      h += '<div class="sc-shots">🎞️ <strong>' + sc.shots.length + ' plans cinématographiques :</strong><br>';
+      sc.shots.forEach((sh, si) => {
+        const c = sh.camera || {};
+        h += '&nbsp;&nbsp;• Plan ' + (si + 1) + ' : ' + (c.type || 'Plan moyen') + ' / ' + (c.movement || 'Fixe') + ' — ' + JTesc(sh.description || '') + '<br>';
+      });
+      h += '</div>';
+    }
+    if(sc.dialogue && sc.dialogue.line_fr) {
+      h += '<div class="sc-line sc-dialogue"><span class="sc-label">🔊 Voix off</span><strong>' + JTesc(sc.dialogue.speaker || '') + '</strong> — « ' + JTesc(sc.dialogue.line_fr) + ' »</div>';
+    }
+    h += '</div>';
+  });
+  v.innerHTML = h;
+  document.getElementById('scriptBadgeJT').textContent = (s.scenes || []).length + ' scènes';
+}
 
-// JT Run
-async JTrunJT(){
- if(state.isRunning)return;if(!JThasActiveKey()){JTshowToast('Ajoutez au moins une clé','error');return;}if(state.selectedNews.length===0){JTshowToast('Sélectionnez des sujets','error');return;}
- state.isRunning=true;state.stopRequested=false;state.script=null;state.videos=[];state.palette=JTpickPalette();state.workingPollUrlBuilder=null;
- document.getElementById('sectionScriptJT').classList.add('hidden');document.getElementById('sectionVideosJT').classList.add('hidden');document.getElementById('sectionPlayerJT').classList.add('hidden');document.getElementById('videosGridJT').innerHTML='';JTrenderScript();JTrenderVideos();JTupdateButtons();
- JTlog('JT lancé. Palette : '+state.palette.label+'. Workers : '+state.keyPool.filter(k=>k.active).length,'highlight');
- try{
-  JTsetStatus('Étape 1/3 — Scénario…');JTlog('Écriture du scénario Wes Anderson…','script');
-  const sys='Tu es scénariste. Retourne un JSON strict. Pas de markdown. Chaque scène a 4 à 6 plans (tableau "shots"). Chaque scène a un dialogue.line_fr EN FRANÇAIS (6 à 12 mots). Personnages = CHATONS KUNG-FU casqués. Style Wes Anderson.';
-  const pr=JTbuildScriptPrompt(state.selectedNews,state.palette);let script=null;
-  for(let att=1;att<=2;att++){try{const c=await JTcallChat(sys,pr,'Scénario',32000,att===1?0.7:0.3);const p=JTextractJson(c);if(p&&p.scenes&&Array.isArray(p.scenes)){script=JTnormalizeScript(p,state.selectedNews);if(script)break;}}catch(e){JTlog('Scénario tentative '+att+' échouée : '+e.message,'warn');}}
-  if(!script){JTlog('Fallback programmatique','warn');script=JTnormalizeScript(JTfallbackScript(state.selectedNews,state.palette),state.selectedNews);}
-  state.script=script;state.presenter=script.presenter;JTrenderScript();document.getElementById('sectionScriptJT').classList.remove('hidden');document.getElementById('sectionScriptJT').classList.add('open');JTlog('Scénario prêt : '+script.scenes.length+' scènes','success');
-  if(state.stopRequested)throw new Error('Arrêt');
-  JTsetStatus('Étape 2/3 — Vidéos…');JTlog('Génération des vidéos…','video');document.getElementById('sectionVideosJT').classList.remove('hidden');document.getElementById('sectionVideosJT').classList.add('open');await JTgenerateAllVideos(script,state.palette);
-  JTsetStatus('Étape 3/3 — Prêt ✦');document.getElementById('sectionPlayerJT').classList.remove('hidden');document.getElementById('sectionPlayerJT').classList.add('open');document.getElementById('sectionPlayerJT').classList.add('open');await JTsleep(1200);JTsetStatus(null);
- }catch(e){if(e.message==='Arrêt'){JTlog('Arrêté.','warn');JTsetStatus('Arrêté.');await JTsleep(1200);JTsetStatus(null);}else{JTlog('Erreur : '+e.message,'error');JTsetStatus('Erreur');await JTsleep(2400);JTsetStatus(null);}}
- state.isRunning=false;state.stopRequested=false;JTupdateButtons();}
-function JTstopJT(){if(!state.isRunning)return;state.stopRequested=true;JTlog('Arrêt demandé…','warn');JTsetStatus('Arrêt en cours…');}
+function JTrenderVideos(){
+  const g = document.getElementById('videosGridJT');
+  if(!g) return;
+  while(g.children.length > state.videos.length) g.removeChild(g.lastChild);
+  for(let i = g.children.length; i < state.videos.length; i++){
+    const card = document.createElement('div');
+    card.className = 'scene-card';
+    card.dataset.index = String(i);
+    card.innerHTML = '<div class="scene-card-header"><span class="scene-card-title">🎬 Scène ' + (i + 1) + '</span><span class="scene-card-status"></span></div><div class="scene-card-body"></div>';
+    g.appendChild(card);
+  }
+  state.videos.forEach((v, i) => {
+    const card = g.children[i];
+    if(!card) return;
+    const st = card.querySelector('.scene-card-status');
+    const bd = card.querySelector('.scene-card-body');
+    const cls = 'scene-card ' + (v.status === 'done' ? 'done' : (v.status === 'error' ? 'error' : (v.status === 'loading' ? 'generating' : '')));
+    if(card.className !== cls) card.className = cls;
+    if(v.status === 'done' && v.url){
+      if(card.dataset.url !== v.url){
+        st.innerHTML = '<span style="color:var(--ok);font-weight:700;">✓</span>';
+        bd.innerHTML = '';
+        const vid = document.createElement('video');
+        vid.src = v.url;
+        vid.controls = true;
+        vid.setAttribute('playsinline', '');
+        bd.appendChild(vid);
+        const a = document.createElement('a');
+        a.className = 'scene-download';
+        a.href = v.url;
+        a.target = '_blank';
+        a.download = 'scene-' + (i + 1) + '.mp4';
+        a.textContent = '⬇ Télécharger la scène';
+        bd.appendChild(a);
+        card.dataset.url = v.url;
+      }
+    } else if(v.status === 'error'){
+      st.innerHTML = '<span style="color:var(--err);font-weight:700;">✕</span>';
+      bd.innerHTML = '<div class="scene-placeholder" style="color:var(--err);">Erreur : ' + JTesc(v.error || 'inconnue') + '</div>';
+    } else {
+      st.innerHTML = '<span class="spinner-mini"></span>';
+      bd.innerHTML = '<div class="scene-placeholder"><div class="spinner-mini"></div><span>' + JTesc(v.progress || 'En attente…') + '</span></div>';
+    }
+  });
+  document.getElementById('videosCountJT').textContent = state.videos.filter(x => x.status === 'done').length + '/' + state.videos.length;
+}
 
-// JT TTS + Player
-let JTttsVoice=null;
-function JTpickFrenchVoice(){if(!('speechSynthesis' in window))return null;const v=window.speechSynthesis.getVoices();if(!v||v.length===0)return null;const fr=v.filter(x=>x.lang&&x.lang.toLowerCase().startsWith('fr'));if(fr.length===0)return null;return fr.find(x=>/premium|enhanced|amelie|thomas|audrey|marie/i.test(x.name))||fr[0];}
-function JTinitTTS(){if(!('speechSynthesis' in window))return;const up=()=>{JTttsVoice=JTpickFrenchVoice();if(JTttsVoice)JTlog('TTS : '+JTttsVoice.name,'voice');};up();window.speechSynthesis.onvoiceschanged=up;}
-function JTspeak(text){if(!state.voiceEnabled||!('speechSynthesis' in window)||!text)return;try{window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='fr-FR';u.rate=1.05;u.pitch=1;u.volume=1;if(JTttsVoice)u.voice=JTttsVoice;window.speechSynthesis.speak(u);state.currentUtterance=u;JTlog('🔊 « '+text.slice(0,90)+(text.length>90?'…':'')+' »','voice');}catch(e){}}
-function JTstopTTS(){try{if('speechSynthesis' in window)window.speechSynthesis.cancel();}catch(e){}state.currentUtterance=null;}
-function JTgetLine(sc){if(sc.dialogue&&sc.dialogue.line_fr)return sc.dialogue.line_fr;if(sc.text_overlay_fr)return sc.text_overlay_fr;return '';}
-function JTplayFilm(){const ready=state.videos.filter(x=>x.status==='done'&&x.url);if(ready.length===0){JTshowToast('Aucune vidéo','error');return;}if(state.isPlayingFilm)return;state.isPlayingFilm=true;JTupdateButtons();const ov=document.getElementById('playerOverlay'),cv=document.getElementById('playerCanvas');if(!ov||!cv)return;const dpr=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(window.innerWidth*dpr);cv.height=Math.round(window.innerHeight*dpr);cv.style.width=window.innerWidth+'px';cv.style.height=window.innerHeight+'px';const ctx=cv.getContext('2d');ov.classList.add('visible');JTlog('Diffusion du JT…','play');const script=state.script||{scenes:[]};const scenes=script.scents||[];const rw=ready.map(v=>{const oi=state.videos.indexOf(v);return{video:v,scene:scenes[oi]||{}};});let i=0;function next(){if(!state.isPlayingFilm||i>=rw.length){JTstopFilmPlayback();JTlog('Diffusion terminée.','success');return;}const{video,scene}=rw[i++];JTlog('Séquence '+i+'/'+rw.length+(scene.party_name?' ['+scene.party_name+']':''),'play');JTplayOneScene(video,scene,ctx,cv,dpr).then(next);}next();}
-function JTplayOneScene(vidObj,scene,ctx,canvas,dpr){return new Promise(resolve=>{const video=document.createElement('video');video.src=vidObj.url;video.playsInline=true;video.muted=true;let ttsFired=false,finished=false;const finish=()=>{if(finished)return;finished=true;resolve();};const tg=setTimeout(()=>{if(!ttsFired){ttsFired=true;const line=JTgetLine(scene);if(line)JTspeak(line);}},2000);const draw=()=>{ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.width,canvas.height);const vw=video.videoWidth||1280,vh=video.videoHeight||720,ar=vw/vh,car=canvas.width/canvas.height;let dw,dh,dx,dy;if(ar>car){dw=canvas.width;dh=canvas.width/ar;dx=0;dy=(canvas.height-dh)/2;}else{dh=canvas.height;dh=canvas.height;dw=canvas.height*ar;dx=(canvas.width-dw)/2;dy=0;}try{ctx.drawImage(video,dx,dy,dw,dh);}catch(e){}const t=video.currentTime||0,dur=video.duration||6;let alpha=1;if(t<0.4)alpha=t/0.4;else if(dur-t<0.5)alpha=Math.max(0,(dur-t)/0.5);if(alpha<=0)return;const pad=Math.round(Math.min(30*dpr,canvas.width*0.03)),bh=Math.round(Math.min(96*dpr,canvas.height*0.16)),by=canvas.height-bh-pad,bx=pad,bw=canvas.width-pad*2;ctx.save();ctx.globalAlpha=alpha;const gr=ctx.createLinearGradient(bx,by,bx,by+bh);gr.addColorStop(0,'rgba(10,14,26,0)');gr.addColorStop(0.35,'rgba(10,14,26,.85)');gr.addColorStop(1,'rgba(10,14,26,.95)');ctx.fillStyle=gr;ctx.fillRect(bx,by,bw,bh);ctx.fillStyle='#e5c15a';ctx.fillRect(bx,by+Math.round(bh*0.15),Math.round(5*dpr),bh-Math.round(bh*0.3));const speaker=(scene.dialogue&&scene.dialogue.speaker)||(scene.character&&scene.character.name)||'';const ns=Math.round(Math.min(15*dpr,canvas.height*0.022)),ts=Math.round(Math.min(22*dpr,canvas.height*0.032));if(speaker){ctx.fillStyle='#e5c15a';ctx.font='700 '+ns+'px -apple-system,BlinkMacSystemFont,Helvetica,Arial';ctx.textBaseline='top';ctx.fillText(speaker.toUpperCase(),bx+Math.round(bh*0.22),by+Math.round(bh*0.18));}const ot=scene.text_overlay_fr||(scene.dialogue&&scene.dialogue.line_fr)||'';if(ot){ctx.fillStyle='#f5f0e1';ctx.font='500 '+ts+'px -apple-system,BlinkMacSystemFont,Helvetica,Arial';ctx.textBaseline='top';let txt=ot;const mw=bw-Math.round(bh*0.4);while(ctx.measureText(txt).width>mw&&txt.length>4){txt=txt.slice(0,-4)+'…';}ctx.fillText(txt,bx+Math.round(bh*0.22),by+Math.round(bh*0.5));}ctx.restore();};const loop=()=>{if(!state.isPlayingFilm){clearTimeout(tg);finish();return;}if(video.paused||video.ended){clearTimeout(tg);finish();return;}draw();state.playRAF=requestAnimationFrame(loop);};video.onloadedmetadata=()=>{clearTimeout(tg);if(!ttsFired){ttsFired=true;const line=JTgetLine(scene);if(line)JTspeak(line);}video.play().then(()=>loop()).catch(()=>{if(!ttsFired){ttsFired=true;const line=JTgetLine(scene);if(line)JTspeak(line);}finish();});};video.oncanplay=()=>{if(!ttsFired){ttsFired=true;const line=JTgetLine(scene);if(line)JTspeak(line);};};video.onended=()=>{clearTimeout(tg);finish();};video.onerror=()=>{if(!ttsFired){ttsFired=true;const line=JTgetLine(scene);if(line)JTspeak(line);}clearTimeout(tg);finish();};video.load();});}
-function JTstopFilmPlayback(){state.isPlayingFilm=false;if(state.playRAF)cancelAnimationFrame(state.playRAF);state.playRAF=null;JTstopTTS();const o=document.getElementById('playerOverlay');if(o)o.classList.remove('visible');JTupdateButtons();}
+function JTupdateButtons(){
+  const launch = document.getElementById('launchJT');
+  const stop = document.getElementById('stopJT');
+  const play = document.getElementById('playFilmJT');
+  const replay = document.getElementById('replayJT');
+  const hk = JThasActiveKey();
+  const hn = state.selectedNews.length > 0;
+  const hv = state.videos.filter(x => x.status === 'done').length > 0;
 
-// ======== BOOT ========
-document.addEventListener('DOMContentLoaded',()=>{
- init();
- // JT UI wiring
- document.querySelectorAll('[data-toggle]').forEach(h=>{h.addEventListener('click',()=>{const el=document.getElementById(h.dataset.toggle);if(el)el.classList.toggle('open');});});
- document.getElementById('refreshNewsJT').addEventListener('click',JTloadAllNews);
- document.getElementById('launchJT').addEventListener('click',async()=>{if(Object.keys(state.partyNews).length===0){await JTloadAllNews();if(state.selectedNews.length===0)return;}if(state.selectedNews.length>0)await JTrunJT();});
- document.getElementById('stopJT').addEventListener('click',JTstopJT);
- document.getElementById('playFilmJT').addEventListener('click',JTplayFilm);
- document.getElementById('replayJT').addEventListener('click',JTplayFilm);
- document.getElementById('playerOverlay').addEventListener('click',JTstopFilmPlayback);
- document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.isPlayingFilm)JTstopFilmPlayback();});
- document.getElementById('voiceToggleJT').addEventListener('change',e=>{state.voiceEnabled=e.target.checked;if(!state.voiceEnabled)JTstopTTS();});
- document.getElementById('tabJournal').addEventListener('click',()=>{document.getElementById('journalBody').classList.remove('hidden');document.getElementById('techBody').classList.add('hidden');document.getElementById('tabJournal').classList.add('active');document.getElementById('tabTech').classList.remove('active');});
- document.getElementById('tabTech').addEventListener('click',()=>{document.getElementById('techBody').classList.remove('hidden');document.getElementById('journalBody').classList.add('hidden');document.getElementById('tabTech').classList.add('active');document.getElementById('tabJournal').classList.remove('active');});
- document.getElementById('debugClear').addEventListener('click',e=>{e.stopPropagation();document.getElementById('journalBody').innerHTML='';document.getElementById('techBody').innerHTML='';});
- document.getElementById('debugCopy').addEventListener('click',e=>{e.stopPropagation();try{navigator.clipboard.writeText(document.getElementById('journalBody').innerText).then(()=>JTshowToast('Copié','success'));}catch(e){JTshowToast('Échec copie','error');}});
- document.getElementById('debugCollapse').addEventListener('click',e=>{e.stopPropagation();document.getElementById('debugPanel').classList.toggle('collapsed');});
- JTrefreshKeyPool();JTinitTTS();JTrenderParties();JTrenderScript();JTrenderVideos();JTupdateButtons();registerSW();
- JTlog('MOVIE prêt. Ajoutez vos clés API.','highlight');
-});
+  if(launch){
+    launch.disabled = !hk || state.isRunning;
+    if(!hk) launch.innerHTML = '🔑 Ajoutez une clé API pour lancer le JT';
+    else if(state.isRunning) launch.innerHTML = '⏳ JT en cours de réalisation…';
+    else if(!hn) launch.innerHTML = '📰 Sélectionnez des sujets pour le JT';
+    else launch.innerHTML = '▶ Lancer le JT MOVIE (' + state.selectedNews.length + ' sujets)';
+  }
+  if(stop) stop.classList.toggle('visible', state.isRunning);
+  if(play) play.disabled = !hv || state.isPlayingFilm || state.isRunning;
+  if(replay) replay.disabled = !hv || state.isPlayingFilm || state.isRunning;
+  document.getElementById('playerBadgeJT').textContent = state.videos.filter(x => x.status === 'done').length;
+}
+
+async function JTloadAllNews(){
+  const parties = Array.from(state.selectedParties);
+  JTlog('Chargement des actualités pour ' + parties.length + ' parti(s)…', 'news');
+  JTsetStatus('Chargement des flux d\'actualités…');
+  state.partyNews = {};
+  for(const pid of parties){
+    const party = PARTIES.find(p => p.id === pid);
+    if(!party) continue;
+    try {
+      const it = await JTfetchPartyNews(party);
+      state.partyNews[pid] = it.slice(0, 5);
+      JTlog(party.emoji + ' ' + party.name + ' : ' + it.length + ' articles', 'news');
+    } catch(e){
+      JTlog('Erreur flux ' + party.name + ' : ' + e.message, 'warn');
+    }
+  }
+  state.selectedNews = [];
+  parties.forEach(pid => {
+    const nw = state.partyNews[pid] || [];
+    nw.slice(0, 2).forEach(n => {
+      if(state.selectedNews.length < 10){
+        const p = PARTIES.find(x => x.id === pid);
+        state.selectedNews.push({ title: n.title, partyId: pid, partyName: p ? p.name : pid });
+      }
+    });
+  });
+  JTrenderNews();
+  JTsetStatus(null);
+  showToast(state.selectedNews.length + ' sujets d\'actualité sélectionnés', 'success');
+}
+
+async function JTfetchPartyNews(party){
+  try {
+    const r = await fetch('https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(party.rss));
+    if(r.ok) {
+      const d = await r.json();
+      if(d.status === 'ok' && d.items && d.items.length) {
+        return d.items.map((it, i) => ({ title: it.title || '', source: it.author || 'Actualité', rank: i + 1 }));
+      }
+    }
+  } catch(e){}
+  return [
+    { title: 'Débat parlementaire et nouvelles réformes — ' + party.name, source: 'Actu politique', rank: 1 },
+    { title: 'Prise de parole et meeting national — ' + party.name, source: 'Conférence', rank: 2 }
+  ];
+}
+
+async function JTrunJT(){
+  if(state.isRunning) return;
+  if(!JThasActiveKey()){
+    showToast('Ajoutez au moins une clé API Agnes valide', 'error');
+    return;
+  }
+  if(state.selectedNews.length === 0){
+    showToast('Sélectionnez au moins un sujet d\'actualité', 'warn');
+    return;
+  }
+
+  state.isRunning = true;
+  state.stopRequested = false;
+  state.script = null;
+  state.videos = [];
+  state.palette = JTpickPalette();
+  state.workingPollUrlBuilder = null;
+
+  document.getElementById('sectionScriptJT').classList.add('hidden');
+  document.getElementById('sectionVideosJT').classList.add('hidden');
+  document.getElementById('sectionPlayerJT').classList.add('hidden');
+  document.getElementById('videosGridJT').innerHTML = '';
+  JTrenderScript();
+  JTrenderVideos();
+  JTupdateButtons();
+
+  JTlog('Démarrage du JT MOVIE. Palette : ' + state.palette.label + '. Workers : ' + state.keyPool.filter(k => k.active).length, 'highlight');
+
+  try {
+    JTsetStatus('Étape 1/3 — Écriture du scénario par l\'IA…');
+    JTlog('Génération du script cinématique avec chatons kung-fu…', 'script');
+
+    // Generate Script
+    const sys = 'Tu es scénariste de cinéma. Retourne un JSON strict sans markdown. Chaque scène a des plans (shots) et un dialogue.line_fr en français (8-12 mots). Les reporters sont des CHATONS KUNG-FU en kimonos Shaolin et casques rétro.';
+    const prompt = 'Écris un JT télévisé satirique de style Wes Anderson avec ces sujets :\n' + state.selectedNews.map((n, i) => (i + 1) + '. [' + n.partyName + '] ' + n.title).join('\n');
+
+    let script = null;
+    try {
+      const body = {
+        model: API_CONFIG.modelText,
+        messages: [{ role: 'system', content: sys }, { role: 'user', content: prompt }],
+        temperature: 0.7,
+        max_tokens: 4000
+      };
+      const res = await JTapiFetch(API_CONFIG.v1Base + '/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      }, 'Scénario', 2);
+      const data = await res.json();
+      const content = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+      if(content) {
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if(jsonMatch) script = JSON.parse(jsonMatch[0]);
+      }
+    } catch(e) {
+      JTlog('Erreur parsing scénario LLM, bascule sur script de secours structuré', 'warn');
+    }
+
+    if(!script || !script.scenes) {
+      script = JTfallbackScript(state.selectedNews, state.palette);
+    }
+
+    state.script = script;
+    state.presenter = script.presenter;
+    JTrenderScript();
+    document.getElementById('sectionScriptJT').classList.remove('hidden');
+    document.getElementById('sectionScriptJT').classList.add('open');
+
+    if(state.stopRequested) throw new Error('Arrêt');
+
+    JTsetStatus('Étape 2/3 — Rendu des vidéos des scènes…');
+    document.getElementById('sectionVideosJT').classList.remove('hidden');
+    document.getElementById('sectionVideosJT').classList.add('open');
+    await JTgenerateAllVideos(script, state.palette);
+
+    JTsetStatus('Étape 3/3 — JT prêt pour la diffusion !');
+    document.getElementById('sectionPlayerJT').classList.remove('hidden');
+    document.getElementById('sectionPlayerJT').classList.add('open');
+    await JTsleep(1200);
+    JTsetStatus(null);
+  } catch(e) {
+    if(e.message === 'Arrêt') {
+      JTlog('Arrêt du JT demandé par l\'utilisateur', 'warn');
+      JTsetStatus('Arrêté.');
+    } else {
+      JTlog('Erreur exécution JT : ' + e.message, 'error');
+      JTsetStatus('Erreur');
+    }
+    await JTsleep(2000);
+    JTsetStatus(null);
+  }
+  state.isRunning = false;
+  state.stopRequested = false;
+  JTupdateButtons();
+}
+
+function JTstopJT(){
+  if(!state.isRunning) return;
+  state.stopRequested = true;
+  JTlog('Demande d\'arrêt envoyée…', 'warn');
+  JTsetStatus('Arrêt en cours…');
+}
+
+function JTfallbackScript(news, palette){
+  const pres = { name: 'Félix Moreau', cat_face: 'chaton siamois', helmet: 'casque rétro doré', outfit: 'kimono de Shaolin ivoire', physical_description: 'cute kawaii humanoid kitten' };
+  const scenes = [];
+  scenes.push({
+    scene_number: 1, type: 'plateau', party_name: 'Neutre',
+    character: pres, decor: 'Plateau rétro pastel symétrique',
+    action: 'Présente les titres du journal télévisé',
+    dialogue: { speaker: pres.name, line_fr: 'Bonsoir à tous, bienvenue dans cette édition spéciale.' }
+  });
+  news.slice(0, 10).forEach((n, i) => {
+    const party = PARTIES.find(p => p.id === n.partyId) || PARTIES[0];
+    const rep = { name: 'Reporter ' + party.name, cat_face: party.chatBreed, helmet: party.helmet, outfit: party.outfit, physical_description: 'cute shaolin kitten' };
+    scenes.push({
+      scene_number: i + 2, type: 'reportage', party_name: party.name,
+      character: rep, decor: 'Décor stylisé aux couleurs ' + party.name,
+      action: 'Analyse sur le terrain en position shaolin',
+      dialogue: { speaker: rep.name, line_fr: 'En direct : ' + n.title.slice(0, 60) + '.' }
+    });
+  });
+  scenes.push({
+    scene_number: scenes.length + 1, type: 'plateau', party_name: 'Neutre',
+    character: pres, decor: 'Plateau rétro pastel symétrique',
+    action: 'Clôture l\'édition avec révérence',
+    dialogue: { speaker: pres.name, line_fr: 'C\'était l\'essentiel de l\'actualité, très bonne soirée.' }
+  });
+  return { title: 'JT Spécial Chatons Kung-Fu', logline: 'Satire politique en plans symétriques Wes Anderson', presenter: pres, scenes };
+}
+
+async function JTgenerateAllVideos(script, palette){
+  state.isGeneratingVideos = true;
+  state.videos = [];
+  const scenes = (script.scenes || []).slice(0, SCENE_COUNT);
+  scenes.forEach(() => state.videos.push({ status: 'pending', url: null, progress: 'En attente…' }));
+  JTrenderVideos();
+
+  const workersCount = Math.max(1, state.keyPool.filter(k => k.active).length);
+  JTlog('Lancement de ' + workersCount + ' worker(s) en parallèle sur ' + scenes.length + ' scènes', 'video');
+  const queue = scenes.map((s, i) => ({ scene: s, index: i }));
+  const workers = [];
+  for(let w = 0; w < workersCount; w++) workers.push(JTvideoWorker(w, queue, script, palette));
+  await Promise.all(workers);
+  state.isGeneratingVideos = false;
+  JTupdateButtons();
+}
+
+async function JTvideoWorker(wid, queue, script, palette){
+  while(queue.length > 0 && !state.stopRequested){
+    const item = queue.shift();
+    if(!item) break;
+    await JTgenerateOneScene(item.scene, item.index, script, palette, wid);
+  }
+}
+
+async function JTgenerateOneScene(scene, idx, script, palette, wid){
+  if(state.stopRequested) return;
+  state.videos[idx].status = 'loading';
+  state.videos[idx].progress = 'Initialisation image clé…';
+  JTrenderVideos();
+
+  const prompt = 'Wes Anderson cinematic 35mm film, symmetric planimetric staging, Shaolin kitten with motorcycle helmet in ' + (scene.decor || 'set') + ', pastel colors ' + palette.colors.join(', ');
+
+  try {
+    // 1. Generate keyframe image
+    const imgBody = { model: API_CONFIG.modelImage, prompt: sanitizeText(prompt), n: 1, size: '1K', ratio: '16:9' };
+    const imgRes = await JTapiFetch(API_CONFIG.v1Base + '/images/generations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(imgBody)
+    }, 'Worker ' + (wid + 1) + ' Image');
+    const imgData = await imgRes.json();
+    const imgUrl = imgData.data && imgData.data[0] && (imgData.data[0].url || (imgData.data[0].b64_json ? 'data:image/png;base64,' + imgData.data[0].b64_json : null));
+
+    if(state.stopRequested) return;
+    state.videos[idx].progress = 'Rendu vidéo de la scène…';
+    JTrenderVideos();
+
+    // 2. Animate into video
+    const vidBody = {
+      model: API_CONFIG.modelVideo,
+      prompt: sanitizeText('Subtle cinematic motion, ' + prompt),
+      num_frames: SCENE_DURATION_FRAMES,
+      frame_rate: API_CONFIG.frameRate,
+      image: imgUrl
+    };
+    const vidRes = await JTapiFetch(API_CONFIG.v1Base + '/videos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(vidBody)
+    }, 'Worker ' + (wid + 1) + ' Video');
+    const vidData = await vidRes.json();
+    const vidId = vidData.video_id || vidData.id || vidData.task_id;
+    if(!vidId) throw new Error('ID vidéo non fourni');
+
+    // 3. Poll for video completion
+    let videoUrl = null;
+    for(let a = 0; a < 60; a++){
+      if(state.stopRequested) return;
+      await JTsleep(8000);
+      state.videos[idx].progress = 'Calcul (' + ((a + 1) * 8) + 's)…';
+      JTrenderVideos();
+
+      try {
+        const pRes = await JTapiFetch(API_CONFIG.baseUrl + API_CONFIG.pollEndpoint + '?video_id=' + encodeURIComponent(vidId) + '&model_name=' + encodeURIComponent(API_CONFIG.modelVideo), { method: 'GET' }, 'Poll');
+        const pData = await pRes.json();
+        const st = pData.status || pData.state || '';
+        if(st === 'completed' || st === 'success' || pData.video_url || pData.url){
+          videoUrl = pData.video_url || pData.url || (pData.metadata && pData.metadata.url);
+          break;
+        } else if(st === 'failed' || st === 'error') {
+          throw new Error('Échec du calcul serveur');
+        }
+      } catch(e){}
+    }
+
+    if(!videoUrl) throw new Error('Délai de calcul dépassé');
+    state.videos[idx] = { status: 'done', url: videoUrl };
+    JTrenderVideos();
+    JTlog('Worker ' + (wid + 1) + ' → Scène ' + (idx + 1) + ' terminée ✓', 'success');
+  } catch(err) {
+    if(state.stopRequested) return;
+    state.videos[idx] = { status: 'error', error: err.message };
+    JTrenderVideos();
+    JTlog('Worker ' + (wid + 1) + ' → Scène ' + (idx + 1) + ' en échec : ' + err.message, 'error');
+  }
+}
+
+// ======== TTS & SEQUENTIAL PLAYER ========
+let JTttsVoice = null;
+function JTinitTTS(){
+  if(!('speechSynthesis' in window)) return;
+  const updateVoice = () => {
+    const voices = window.speechSynthesis.getVoices();
+    if(!voices || voices.length === 0) return;
+    const fr = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('fr'));
+    JTttsVoice = fr.find(v => /premium|enhanced|thomas|audrey|marie/i.test(v.name)) || fr[0] || null;
+  };
+  updateVoice();
+  window.speechSynthesis.onvoiceschanged = updateVoice;
+}
+
+function JTspeak(text){
+  if(!state.voiceEnabled || !('speechSynthesis' in window) || !text) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'fr-FR';
+    u.rate = 1.05;
+    if(JTttsVoice) u.voice = JTttsVoice;
+    window.speechSynthesis.speak(u);
+    state.currentUtterance = u;
+  } catch(e){}
+}
+
+function JTstopTTS(){
+  try { if('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch(e){}
+  state.currentUtterance = null;
+}
+
+function JTplayFilm(){
+  const ready = state.videos.filter(x => x.status === 'done' && x.url);
+  if(ready.length === 0){
+    showToast('Aucune vidéo prête à diffuser', 'warn');
+    return;
+  }
+  if(state.isPlayingFilm) return;
+  state.isPlayingFilm = true;
+  JTupdateButtons();
+
+  const overlay = document.getElementById('playerOverlay');
+  const canvas = document.getElementById('playerCanvas');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.round(window.innerWidth * dpr);
+  canvas.height = Math.round(window.innerHeight * dpr);
+  canvas.style.width = window.innerWidth + 'px';
+  canvas.style.height = window.innerHeight + 'px';
+  const ctx = canvas.getContext('2d');
+  overlay.classList.add('visible');
+
+  const scenes = (state.script && state.script.scenes) || [];
+  const sequence = ready.map(v => {
+    const idx = state.videos.indexOf(v);
+    return { video: v, scene: scenes[idx] || {} };
+  });
+
+  let currentIdx = 0;
+  function playNext(){
+    if(!state.isPlayingFilm || currentIdx >= sequence.length){
+      JTstopFilmPlayback();
+      showToast('Diffusion du JT terminée', 'success');
+      return;
+    }
+    const item = sequence[currentIdx++];
+    JTplayOneScene(item.video, item.scene, ctx, canvas, dpr).then(playNext);
+  }
+  playNext();
+}
+
+function JTplayOneScene(vidObj, scene, ctx, canvas, dpr){
+  return new Promise(resolve => {
+    const video = document.createElement('video');
+    video.src = vidObj.url;
+    video.playsInline = true;
+    video.muted = true;
+    let finished = false;
+    const finish = () => { if(finished) return; finished = true; resolve(); };
+
+    const line = scene.dialogue && scene.dialogue.line_fr;
+    if(line) JTspeak(line);
+
+    const draw = () => {
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const vw = video.videoWidth || 1280, vh = video.videoHeight || 720;
+      const ar = vw / vh, car = canvas.width / canvas.height;
+      let dw, dh, dx, dy;
+      if(ar > car){
+        dw = canvas.width; dh = canvas.width / ar; dx = 0; dy = (canvas.height - dh) / 2;
+      } else {
+        dh = canvas.height; dw = canvas.height * ar; dx = (canvas.width - dw) / 2; dy = 0;
+      }
+      try { ctx.drawImage(video, dx, dy, dw, dh); } catch(e){}
+
+      // Lower third banner
+      const pad = 24 * dpr, bh = 80 * dpr, by = canvas.height - bh - pad, bx = pad, bw = canvas.width - pad * 2;
+      ctx.fillStyle = 'rgba(10,14,26,0.85)';
+      ctx.fillRect(bx, by, bw, bh);
+      ctx.fillStyle = '#4a6cf7';
+      ctx.fillRect(bx, by, 6 * dpr, bh);
+
+      const speaker = (scene.dialogue && scene.dialogue.speaker) || scene.party_name || 'JT MOVIE';
+      ctx.fillStyle = '#e5c15a';
+      ctx.font = '700 ' + (14 * dpr) + 'px -apple-system, sans-serif';
+      ctx.fillText(speaker.toUpperCase(), bx + 16 * dpr, by + 26 * dpr);
+
+      if(line){
+        ctx.fillStyle = '#f0f4ff';
+        ctx.font = '500 ' + (18 * dpr) + 'px -apple-system, sans-serif';
+        ctx.fillText(line, bx + 16 * dpr, by + 56 * dpr);
+      }
+    };
+
+    const loop = () => {
+      if(!state.isPlayingFilm || video.paused || video.ended){ finish(); return; }
+      draw();
+      state.playRAF = requestAnimationFrame(loop);
+    };
+
+    video.onloadedmetadata = () => { video.play().then(() => loop()).catch(finish); };
+    video.onended = finish;
+    video.onerror = finish;
+    video.load();
+  });
+}
+
+function JTstopFilmPlayback(){
+  state.isPlayingFilm = false;
+  if(state.playRAF) cancelAnimationFrame(state.playRAF);
+  state.playRAF = null;
+  JTstopTTS();
+  const o = document.getElementById('playerOverlay');
+  if(o) o.classList.remove('visible');
+  JTupdateButtons();
+}
+
+// ======== PWA SERVICE WORKER ========
+const SW_CODE = `
+const CACHE_NAME='movie-v2';
+self.addEventListener('install', e => self.skipWaiting());
+self.addEventListener('activate', e => clients.claim());
+self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+`;
+function registerSW(){
+  if('serviceWorker' in navigator){
+    const b = new Blob([SW_CODE], {type: 'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(b)).catch(() => {});
+  }
+}
+
+// ======== START APPLICATION ========
+document.addEventListener('DOMContentLoaded', init);
 })();
 </script>
 </body>
