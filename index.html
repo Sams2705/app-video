@@ -66,6 +66,8 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box
 .badge{display:inline-block;padding:.15rem .5rem;background:transparent;color:var(--acc);border:1px solid var(--border);border-radius:4px;font-size:.62rem;letter-spacing:.08em;font-weight:700}
 .badge.ok{color:var(--ok);border-color:rgba(16,185,85,.4)}
 .badge.purple{color:var(--acc2);border-color:rgba(124,58,237,.4)}
+.badge.warn{color:var(--warn);border-color:rgba(245,158,11,.4)}
+.badge.error{color:var(--err);border-color:rgba(239,68,68,.4)}
 .chevron{font-size:.7rem;color:var(--faint);transition:transform .3s}
 .section.open .chevron{transform:rotate(180deg);color:var(--acc)}
 .section-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
@@ -122,7 +124,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box
 .status-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);color:var(--ink);padding:.75rem 1rem;font-size:.76rem;display:flex;align-items:center;gap:.6rem;transform:translateY(100%);transition:transform .35s;z-index:200;font-family:var(--fm)}
 .status-bar.visible{transform:translateY(0)}
 .spinner{width:16px;height:16px;border:2px solid rgba(74,108,247,.2);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
-.debug-panel{position:fixed;bottom:0;left:0;right:0;height:210px;background:#05070c;border-top:2px solid var(--acc);z-index:300;display:flex;flex-direction:column;font-family:var(--fm);transition:height .3s ease}
+.debug-panel{position:fixed;bottom:0;left:0;right:0;height:220px;background:#05070c;border-top:2px solid var(--acc);z-index:300;display:flex;flex-direction:column;font-family:var(--fm);transition:height .3s ease}
 .debug-panel.collapsed{height:40px}
 .debug-header{display:flex;justify-content:space-between;align-items:center;padding:.35rem .65rem;background:linear-gradient(90deg,#0f121e,#161e30);border-bottom:1px solid var(--border);flex-shrink:0;user-select:none}
 .debug-tabs{display:flex;gap:.25rem}
@@ -180,11 +182,11 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box
 
 <header>
 <h1>MOVIE</h1>
-<p class="subtitle">Studio Vidéo & Photo IA · Moteur Anti-Perte · Mode JT Chatons Kung-Fu</p>
+<p class="subtitle">Studio Vidéo & Photo IA Multi-API · Moteur Anti-Perte · Agnes Video 2.5</p>
 </header>
 
 <div class="banner">
-<strong>MOVIE — Génération vidéo & photo IA tout-en-un.</strong> Créez votre première photo avec <span class="hl">Agnes Image</span> ou animez n'importe quelle photo en vidéo avec styles artistiques. Vous pouvez aussi lancer le <span class="hl2">JT politique satirique</span> en parallèle.
+<strong>MOVIE — Génération vidéo & photo IA tout-en-un.</strong> Créez votre première photo avec <span class="hl">Agnes Image 2.5</span> ou animez n'importe quelle photo en vidéo avec <span class="hl2">Agnes Video 2.5 Flash</span>.
 </div>
 
 <!-- PWA Install -->
@@ -209,18 +211,20 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box
 <div class="panel" id="api-panel">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
   <label for="api-keys-input" style="font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;font-weight:700;">
-    Clé(s) API Agnes (1 clé = 1 worker, plusieurs clés = parallélisation)
+    Clé(s) API Agnes (platform.agnes-ai.com)
   </label>
   <span class="badge ok" id="apiKeyBadge">0 clé</span>
 </div>
 <textarea id="api-keys-input" placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx&#10;(Collez votre clé API ici)" rows="2" spellcheck="false" autocomplete="off"></textarea>
 <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
   <button type="button" class="btn btn-primary" id="api-save-btn" style="flex:2;margin-bottom:0;padding:.65rem 1rem;font-size:.82rem;">💾 Enregistrer la clé</button>
+  <button type="button" class="btn" id="api-test-btn" style="flex:1.5;margin-bottom:0;padding:.65rem 1rem;font-size:.82rem;border-color:var(--acc);color:var(--acc);">🔍 Tester ma clé</button>
   <button type="button" class="btn" id="api-clear-btn" style="flex:1;margin-bottom:0;padding:.65rem 1rem;font-size:.82rem;color:var(--err);border-color:rgba(239,68,68,.3);">Effacer</button>
 </div>
 <div class="status" id="api-status-line" style="margin-top:.6rem;"><span class="dot" id="apiKeyDot"></span><span id="api-status-text">Aucune clé API enregistrée</span></div>
+<div id="keyDiagnosticResult" class="hint" style="margin-top:.4rem;padding:.5rem;border-radius:6px;background:var(--bg2);display:none;"></div>
 <div class="keys-list" id="api-keys-status"></div>
-<div class="hint">Obtenez votre clé sur <a href="https://platform.agnes-ai.com" target="_blank" rel="noopener">platform.agnes-ai.com</a> · Stockée localement et de manière sécurisée dans votre navigateur.</div>
+<div class="hint">Obtenez votre clé sur <a href="https://platform.agnes-ai.com" target="_blank" rel="noopener">platform.agnes-ai.com</a> · Stockée uniquement en local dans votre navigateur.</div>
 </div>
 
 <!-- Mode Toggle -->
@@ -238,7 +242,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box
 <!-- Sub-section: Generate Photo First -->
 <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:1rem;">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
-    <strong style="color:var(--acc);font-size:.85rem;">🎨 1. Générer une Photo IA (Agnes Image)</strong>
+    <strong style="color:var(--acc);font-size:.85rem;">🎨 1. Générer une Photo IA (Agnes Image 2.5)</strong>
     <span class="badge purple">Text-to-Image</span>
   </div>
   <p style="font-size:.76rem;color:var(--dim);margin-bottom:.6rem;">Créez votre première photo avec l'IA. Elle sera prête à être téléchargée ou directement animée en vidéo.</p>
@@ -255,7 +259,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box
   <div class="file-overlay">
     <div class="upload-area" id="uploadAreaMovie">
       <div class="upload-icon">📷</div>
-      <div class="upload-text">Cliquez ou glissez une image ici (PNG, JPG, WebP)</div>
+      <div class="upload-text">Cliquez ou glissez une image ici (PNG, JPG, WebP — optimisée automatiquement)</div>
       <input type="file" id="imageInputMovie" accept="image/*" class="file-input-hidden">
     </div>
   </div>
@@ -270,6 +274,15 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box
     </div>
   </div>
   <div class="auto-style-hint" id="autoStyleHint"><strong>Analyse visuelle :</strong> <span id="autoStyleText">Prêt.</span></div>
+</div>
+
+<!-- Video Model Choice -->
+<div class="form-group" style="margin-top:.8rem;">
+  <label for="videoModelChoice" style="display:block;font-size:.8rem;color:var(--dim);margin-bottom:.4rem;font-weight:600;">Modèle vidéo IA Agnes</label>
+  <select id="videoModelChoice">
+    <option value="agnes-video-2.5-flash" selected>Agnes Video 2.5 Flash (Rapide, recommandé & économe)</option>
+    <option value="agnes-video-2.5">Agnes Video 2.5 Pro (Qualité maximale)</option>
+  </select>
 </div>
 
 <!-- Prompt Video -->
@@ -301,9 +314,9 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box
 <div class="form-group" style="margin-top:.8rem;">
   <label for="durationMovie" style="display:block;font-size:.8rem;color:var(--dim);margin-bottom:.4rem;font-weight:600;">Durée de la vidéo</label>
   <select id="durationMovie">
-    <option value="153" selected>6,4 secondes (153 frames à 24fps) — Recommandé</option>
-    <option value="121">5,0 secondes (121 frames)</option>
-    <option value="241">10,0 secondes (241 frames)</option>
+    <option value="5" selected>5 secondes (Format standard optimal)</option>
+    <option value="6.4">6,4 secondes (153 frames à 24fps)</option>
+    <option value="10">10 secondes (Long métrage)</option>
   </select>
 </div>
 
@@ -426,9 +439,11 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box
 const API_CONFIG = {
   baseUrl: 'https://apihub.agnes-ai.com',
   v1Base: 'https://apihub.agnes-ai.com/v1',
-  pollEndpoint: '/agnesapi',
-  modelVideo: 'agnes-video-v2.0',
-  modelImage: 'agnes-image-2.1-flash',
+  pollEndpoint: '/v1/video/generations',
+  modelVideoDefault: 'agnes-video-2.5-flash',
+  modelVideoPro: 'agnes-video-2.5',
+  modelImage: 'agnes-image-2.5-flash',
+  modelImageFallback: 'agnes-image-2.1-flash',
   modelText: 'agnes-2.5-flash',
   frameRate: 24
 };
@@ -456,9 +471,8 @@ const STYLE_PROMPTS = {
   simpson: ', The Simpsons cartoon animation style, Matt Groening style, yellow character tone, bold black outlines, flat primary colors'
 };
 
-const POLL_INTERVAL_SEC = 7;
-const MAX_POLL_ATTEMPTS = 120;
-const MAX_IMAGE_SIZE = 14 * 1024 * 1024;
+const POLL_INTERVAL_SEC = 6;
+const MAX_POLL_ATTEMPTS = 150;
 
 // Global State
 const state = {
@@ -498,12 +512,14 @@ function init(){
   els = {
     apiKeysInput: document.getElementById('api-keys-input'),
     apiSaveBtn: document.getElementById('api-save-btn'),
+    apiTestBtn: document.getElementById('api-test-btn'),
     apiClearBtn: document.getElementById('api-clear-btn'),
     apiKeyBadge: document.getElementById('apiKeyBadge'),
     apiKeyDot: document.getElementById('apiKeyDot'),
     apiStatusLine: document.getElementById('api-status-line'),
     apiStatusText: document.getElementById('api-status-text'),
     apiKeysStatus: document.getElementById('api-keys-status'),
+    keyDiagnosticResult: document.getElementById('keyDiagnosticResult'),
     apiStatus: document.getElementById('apiStatus'),
     statusDot: document.getElementById('statusDot'),
     statusText: document.getElementById('statusText'),
@@ -523,6 +539,7 @@ function init(){
     btnDownloadPhoto: document.getElementById('btnDownloadPhoto'),
     btnRemovePhoto: document.getElementById('btnRemovePhoto'),
     autoStyleText: document.getElementById('autoStyleText'),
+    videoModelChoice: document.getElementById('videoModelChoice'),
     promptMovie: document.getElementById('promptMovie'),
     styleMovie: document.getElementById('styleMovie'),
     durationMovie: document.getElementById('durationMovie'),
@@ -545,7 +562,7 @@ function init(){
     techBody: document.getElementById('techBody')
   };
 
-  log('MOVIE initialisé avec succès', 'highlight');
+  log('MOVIE Studio initialisé (Version 2.5 compatible New-API)', 'highlight');
 
   // Load API Keys
   loadSavedApiKeys();
@@ -569,7 +586,7 @@ function init(){
   } else if(savedVideoId) {
     state.videoId = savedVideoId;
     if(els.retryBanner) els.retryBanner.classList.remove('hidden');
-    log('Génération interrompue détectée (ID: ' + savedVideoId + ')', 'warn');
+    log('Tâche vidéo non finalisée détectée (ID: ' + savedVideoId + ')', 'warn');
   }
 
   setupEventListeners();
@@ -589,7 +606,7 @@ function init(){
   });
 }
 
-// ======== API KEY MANAGEMENT ========
+// ======== API KEY MANAGEMENT & DIAGNOSTIC ========
 function loadSavedApiKeys(){
   let rawKeys = [];
   const stored = localStorage.getItem(STORAGE.API_KEYS) || localStorage.getItem(STORAGE.API_KEY_LEGACY);
@@ -632,9 +649,77 @@ function saveApiKeysFromInput(){
 
   if(lines.length > 0) {
     showToast(lines.length + ' clé(s) API enregistrée(s)', 'success');
-    log(lines.length + ' clé(s) API validée(s) en local', 'success');
+    log(lines.length + ' clé(s) API enregistrée(s) en local', 'success');
   } else {
     showToast('Aucune clé valide détectée', 'warn');
+  }
+}
+
+async function testApiKeyDiagnostic(){
+  const key = state.apiKey || (els.apiKeysInput && els.apiKeysInput.value.trim().split('\n')[0]);
+  if(!key || key.length < 5){
+    showToast('Veuillez entrer une clé API dans le champ ci-dessus', 'error');
+    if(els.apiKeysInput) els.apiKeysInput.focus();
+    return;
+  }
+
+  if(els.keyDiagnosticResult){
+    els.keyDiagnosticResult.style.display = 'block';
+    els.keyDiagnosticResult.innerHTML = '<span class="spinner-mini"></span> Connexion à platform.agnes-ai.com pour tester votre clé…';
+  }
+  log('Test diagnostic de la clé API en cours…', 'info');
+
+  try {
+    const res = await fetch(API_CONFIG.v1Base + '/models', {
+      method: 'GET',
+      headers: { 'Authorization': 'Bearer ' + key.trim() }
+    });
+
+    const data = await res.json();
+    if(!res.ok || data.error) {
+      const err = data.error || {};
+      const errMsg = err.message || ('Erreur HTTP ' + res.status);
+      log('Échec diagnostic clé : ' + errMsg, 'error');
+
+      let userAdvice = '';
+      if(/invalid token/i.test(errMsg)) {
+        userAdvice = '❌ <strong>Clé invalide</strong> : La clé n\'a pas été reconnue par Agnes AI. Vérifiez qu\'elle a été copiée intégralement depuis <a href="https://platform.agnes-ai.com" target="_blank">platform.agnes-ai.com</a> sans espace superflu.';
+      } else if(/quota|balance|insufficient/i.test(errMsg)) {
+        userAdvice = '⚠️ <strong>Solde épuisé</strong> : Votre clé est valide mais votre compte n\'a plus de crédits disponibles sur platform.agnes-ai.com.';
+      } else {
+        userAdvice = '⚠️ Réponse Agnes AI : ' + escapeHtml(errMsg);
+      }
+
+      if(els.keyDiagnosticResult){
+        els.keyDiagnosticResult.style.display = 'block';
+        els.keyDiagnosticResult.innerHTML = userAdvice;
+      }
+      showToast('Problème avec la clé API', 'error');
+      return;
+    }
+
+    // Success - list available models
+    const models = (data.data || []).map(m => m.id);
+    const hasVideo = models.some(m => m.includes('video'));
+    const hasImage = models.some(m => m.includes('image'));
+
+    log('Diagnostic réussi ! Modèles accessibles : ' + models.join(', '), 'success');
+    showToast('✓ Clé API 100% valide et fonctionnelle !', 'success');
+
+    if(els.keyDiagnosticResult){
+      els.keyDiagnosticResult.style.display = 'block';
+      els.keyDiagnosticResult.innerHTML = '✅ <strong style="color:var(--ok);">Clé API valide et active !</strong><br>' +
+        '• Modèles vidéo détectés : <strong>' + (hasVideo ? 'Oui (agnes-video-2.5)' : 'Non activé sur votre compte') + '</strong><br>' +
+        '• Modèles image détectés : <strong>' + (hasImage ? 'Oui (agnes-image-2.5)' : 'Non activé') + '</strong><br>' +
+        '• Prêt à générer des photos et des vidéos.';
+    }
+  } catch(err) {
+    log('Erreur réseau lors du test de clé : ' + err.message, 'error');
+    if(els.keyDiagnosticResult){
+      els.keyDiagnosticResult.style.display = 'block';
+      els.keyDiagnosticResult.innerHTML = '⚠️ Impossible de joindre l\'API Agnes : ' + escapeHtml(err.message);
+    }
+    showToast('Erreur de connexion', 'error');
   }
 }
 
@@ -645,6 +730,7 @@ function clearApiKeys(){
   localStorage.removeItem(STORAGE.API_KEYS);
   localStorage.removeItem(STORAGE.API_KEY_LEGACY);
   if(els.apiKeysInput) els.apiKeysInput.value = '';
+  if(els.keyDiagnosticResult) els.keyDiagnosticResult.style.display = 'none';
   renderApiKeysStatus();
   validateMovieForm();
   JTupdateButtons();
@@ -706,6 +792,7 @@ function updateModeUI(){
 // ======== EVENT LISTENERS ========
 function setupEventListeners(){
   if(els.apiSaveBtn) els.apiSaveBtn.addEventListener('click', saveApiKeysFromInput);
+  if(els.apiTestBtn) els.apiTestBtn.addEventListener('click', testApiKeyDiagnostic);
   if(els.apiClearBtn) els.apiClearBtn.addEventListener('click', clearApiKeys);
   if(els.apiKeysInput) {
     els.apiKeysInput.addEventListener('keydown', e => {
@@ -830,7 +917,6 @@ function setupEventListeners(){
 function validateMovieForm(){
   const hasKey = state.apiKey.length > 0;
   const hasPrompt = els.promptMovie && els.promptMovie.value.trim().length > 0;
-  // Allows generation if user has an image OR prompt (text-to-video / image-to-video)
   if(els.btnGenerateMovie) {
     els.btnGenerateMovie.disabled = !(hasKey && (hasPrompt || state.singleImage));
   }
@@ -853,59 +939,71 @@ async function handleGeneratePhoto(){
   els.btnGeneratePhoto.disabled = true;
   els.photoStatusLine.classList.remove('hidden');
   els.photoStatusText.textContent = 'Génération de la photo en haute définition…';
-  log('Création photo IA via Agnes Image 2.1 : « ' + prompt.slice(0, 50) + '… »', 'highlight');
+  log('Création photo IA via Agnes Image : « ' + prompt.slice(0, 50) + '… »', 'highlight');
 
-  try {
-    const body = {
-      model: API_CONFIG.modelImage,
-      prompt: sanitizeText(prompt),
-      n: 1,
-      size: '1K',
-      ratio: '16:9'
-    };
+  // Try newer model first, fallback to 2.1-flash if needed
+  const modelsToTry = [API_CONFIG.modelImage, API_CONFIG.modelImageFallback];
+  let lastErr = null;
 
-    const res = await fetch(API_CONFIG.v1Base + '/images/generations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + state.apiKey
-      },
-      body: JSON.stringify(body)
-    });
+  for(const modelName of modelsToTry){
+    try {
+      const body = {
+        model: modelName,
+        prompt: sanitizeText(prompt),
+        n: 1,
+        size: '1K',
+        ratio: '16:9'
+      };
 
-    if(!res.ok) {
-      const errTxt = await res.text().catch(() => '');
-      throw new Error('HTTP ' + res.status + ' : ' + errTxt.slice(0, 200));
+      const res = await fetch(API_CONFIG.v1Base + '/images/generations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + state.apiKey
+        },
+        body: JSON.stringify(body)
+      });
+
+      const data = await res.json();
+      if(!res.ok || data.error) {
+        const msg = (data.error && data.error.message) || ('HTTP ' + res.status);
+        throw new Error(msg);
+      }
+
+      const item = data.data && data.data[0];
+      if(!item) throw new Error('Aucune image reçue de l\'API');
+
+      const imageUrl = item.url || (item.b64_json ? 'data:image/png;base64,' + item.b64_json : null);
+      if(!imageUrl) throw new Error('Format d\'image inconnu');
+
+      // Display image in preview
+      state.singleImage = imageUrl;
+      els.imagePreviewMovie.src = imageUrl;
+      els.previewContainer.classList.remove('hidden');
+      els.autoStyleText.textContent = 'Photo IA prête pour l\'animation vidéo.';
+      
+      if(!els.promptMovie.value.trim()) {
+        els.promptMovie.value = 'Cinematic motion, ' + prompt;
+      }
+
+      validateMovieForm();
+      showToast('Photo IA créée avec succès !', 'success');
+      log('Photo générée avec succès via ' + modelName, 'success');
+      lastErr = null;
+      break;
+    } catch(err) {
+      lastErr = err;
+      log('Tentative ' + modelName + ' : ' + err.message, 'warn');
     }
-
-    const data = await res.json();
-    const item = data.data && data.data[0];
-    if(!item) throw new Error('Aucune image reçue de l\'API');
-
-    const imageUrl = item.url || (item.b64_json ? 'data:image/png;base64,' + item.b64_json : null);
-    if(!imageUrl) throw new Error('Format d\'image inconnu');
-
-    // Display image in preview
-    state.singleImage = imageUrl;
-    els.imagePreviewMovie.src = imageUrl;
-    els.previewContainer.classList.remove('hidden');
-    els.autoStyleText.textContent = 'Photo IA prête pour l\'animation vidéo.';
-    
-    // Auto-fill video prompt if empty
-    if(!els.promptMovie.value.trim()) {
-      els.promptMovie.value = 'Cinematic motion, ' + prompt;
-    }
-
-    validateMovieForm();
-    showToast('Photo IA créée avec succès !', 'success');
-    log('Photo générée et prête à être animée', 'success');
-  } catch(err) {
-    log('Erreur génération photo : ' + err.message, 'error');
-    showToast('Échec génération photo : ' + err.message, 'error');
-  } finally {
-    els.btnGeneratePhoto.disabled = false;
-    els.photoStatusLine.classList.add('hidden');
   }
+
+  if(lastErr){
+    log('Échec génération photo : ' + lastErr.message, 'error');
+    showToast('Erreur génération photo : ' + lastErr.message, 'error');
+  }
+
+  els.btnGeneratePhoto.disabled = false;
+  els.photoStatusLine.classList.add('hidden');
 }
 
 function downloadCurrentPhoto(){
@@ -927,25 +1025,39 @@ function removeCurrentPhoto(){
   validateMovieForm();
 }
 
-// ======== IMAGE UPLOAD HANDLER ========
+// ======== IMAGE UPLOAD HANDLER & AUTO-RESIZE ========
 function handleMovieImage(file){
   if(!file.type.startsWith('image/')){
     showToast('Format non supporté. Choisissez une image.', 'error');
     return;
   }
-  if(file.size > MAX_IMAGE_SIZE){
-    showToast('Image trop volumineuse (14 Mo max)', 'error');
-    return;
-  }
   const reader = new FileReader();
   reader.onload = e => {
-    state.singleImage = e.target.result;
-    els.imagePreviewMovie.src = e.target.result;
-    els.previewContainer.classList.remove('hidden');
-    analyzeMovieImage(e.target.result);
-    validateMovieForm();
-    log('Image source chargée avec succès', 'success');
-    showToast('Image chargée', 'success');
+    // Auto-rescale image to standard 1280x720 / max 1280px to avoid 413 Payload Too Large
+    const rawDataUrl = e.target.result;
+    const img = new Image();
+    img.onload = () => {
+      const maxDim = 1280;
+      let w = img.width, h = img.height;
+      if(w > maxDim || h > maxDim){
+        if(w > h){ h = Math.round((h * maxDim) / w); w = maxDim; }
+        else { w = Math.round((w * maxDim) / h); h = maxDim; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const optimizedDataUrl = canvas.toDataURL('image/jpeg', 0.88);
+
+      state.singleImage = optimizedDataUrl;
+      els.imagePreviewMovie.src = optimizedDataUrl;
+      els.previewContainer.classList.remove('hidden');
+      analyzeMovieImage(optimizedDataUrl);
+      validateMovieForm();
+      log('Image source optimisée (' + w + 'x' + h + ' px)', 'success');
+      showToast('Image prête pour la vidéo', 'success');
+    };
+    img.src = rawDataUrl;
   };
   reader.readAsDataURL(file);
 }
@@ -976,13 +1088,15 @@ function analyzeMovieImage(dataUri){
 // ======== VIDEO GENERATION (MOVIE MODE) ========
 function handleMovieGenerate(){
   if(!state.apiKey){
-    showToast('Clé API manquante', 'error');
+    showToast('Clé API manquante. Enregistrez votre clé ci-dessus.', 'error');
+    if(els.apiKeysInput) els.apiKeysInput.focus();
     return;
   }
-  const rawPrompt = els.promptMovie.value.trim();
+  const rawPrompt = els.promptMovie.value.trim() || 'Cinematic video, smooth movement';
   const selectedStyle = els.styleMovie.value;
   const styleAddon = STYLE_PROMPTS[selectedStyle] || '';
   const finalPrompt = rawPrompt + styleAddon;
+  const chosenModel = (els.videoModelChoice && els.videoModelChoice.value) || API_CONFIG.modelVideoDefault;
 
   state.isVideoLocked = false;
   state.videoId = null;
@@ -995,74 +1109,106 @@ function handleMovieGenerate(){
   els.videoActionsMovie.classList.add('hidden');
   els.lockedBadgeMovie.classList.add('hidden');
   els.loadingMovie.classList.remove('hidden');
+  if(els.loadingMovieMsg) els.loadingMovieMsg.textContent = 'Envoi de la requête au serveur ' + chosenModel + '…';
   startMovieTimer();
   updateApiStatus('polling');
 
-  log('Démarrage génération vidéo MOVIE…', 'highlight');
+  log('Démarrage génération vidéo MOVIE via ' + chosenModel, 'highlight');
   log('Prompt : ' + finalPrompt.slice(0, 100) + '…', 'info');
 
-  createMovieVideo(state.singleImage, finalPrompt)
+  createMovieVideo(state.singleImage, finalPrompt, chosenModel)
     .catch(err => {
       log('Échec création vidéo : ' + err.message, 'error');
-      showToast('Erreur : ' + err.message, 'error');
+      showToast('Erreur vidéo : ' + err.message, 'error');
       updateApiStatus('error');
       els.loadingMovie.classList.add('hidden');
       stopMovieTimer();
     });
 }
 
-async function createMovieVideo(imageSource, prompt){
-  const numFrames = parseInt(els.durationMovie.value, 10) || 153;
+async function createMovieVideo(imageSource, prompt, modelName){
+  const durSec = parseFloat(els.durationMovie.value) || 5;
+  const numFrames = Math.round(durSec * 24);
+
+  // Compatible with New API / Agnes AI normalized schema
   const body = {
-    model: API_CONFIG.modelVideo,
+    model: modelName,
     prompt: sanitizeText(prompt),
+    duration: durSec,
     num_frames: numFrames,
-    frame_rate: API_CONFIG.frameRate
+    fps: API_CONFIG.frameRate,
+    width: 1280,
+    height: 720
   };
 
   if(imageSource) {
     body.image = imageSource;
+    body.first_frame_image = imageSource;
   }
 
-  const res = await fetch(API_CONFIG.v1Base + '/videos', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + state.apiKey
-    },
-    body: JSON.stringify(body)
-  });
+  // Endpoints to try (New API standard: /v1/video/generations, legacy: /v1/videos)
+  const endpoints = [
+    API_CONFIG.v1Base + '/video/generations',
+    API_CONFIG.v1Base + '/videos'
+  ];
 
-  if(!res.ok) {
-    const txt = await res.text().catch(() => '');
-    throw new Error('HTTP ' + res.status + ' : ' + txt.slice(0, 250));
+  let lastErr = null;
+  let resultData = null;
+
+  for(const ep of endpoints){
+    try {
+      log('Appel création : ' + ep + ' (Modèle: ' + modelName + ')', 'info');
+      const res = await fetch(ep, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + state.apiKey
+        },
+        body: JSON.stringify(body)
+      });
+
+      const d = await res.json();
+      if(!res.ok || d.error) {
+        const msg = (d.error && d.error.message) || ('HTTP ' + res.status);
+        throw new Error(msg);
+      }
+      resultData = d;
+      break;
+    } catch(e) {
+      lastErr = e;
+      log('Route ' + ep + ' rejetée : ' + e.message, 'warn');
+    }
   }
 
-  const d = await res.json();
-  const vid = d.video_id || d.id || d.videoId || d.task_id;
-  if(!vid) throw new Error('Aucun identifiant de tâche vidéo renvoyé');
+  if(!resultData) {
+    throw new Error(lastErr ? lastErr.message : 'Erreur de transmission avec l\'API vidéo');
+  }
+
+  const vid = resultData.id || resultData.task_id || resultData.video_id;
+  if(!vid) throw new Error('Aucun identifiant de tâche vidéo retourné par Agnes');
 
   state.videoId = vid;
   localStorage.setItem(STORAGE.VIDEO_ID, vid);
-  log('Tâche vidéo enregistrée : ' + vid, 'success');
-  startPolling(vid);
+  log('Tâche vidéo acceptée avec succès (ID: ' + vid + ')', 'success');
+  startPolling(vid, modelName);
 }
 
-function startPolling(videoId){
+function startPolling(videoId, modelName){
   if(state.pollingInterval) clearInterval(state.pollingInterval);
   state.isVideoLocked = false;
-  log('Début du suivi de génération (' + POLL_INTERVAL_SEC + 's)…', 'polling');
+  modelName = modelName || API_CONFIG.modelVideoDefault;
+  log('Suivi du rendu vidéo en temps réel (ID: ' + videoId + ')…', 'polling');
 
   let attempts = 0;
   const poll = async () => {
     if(state.isVideoLocked) return;
     attempts++;
 
-    // Agnes poll endpoints
+    // Polling endpoints
     const pollUrls = [
-      API_CONFIG.baseUrl + API_CONFIG.pollEndpoint + '?video_id=' + encodeURIComponent(videoId) + '&model_name=' + encodeURIComponent(API_CONFIG.modelVideo),
+      API_CONFIG.v1Base + '/video/generations/' + encodeURIComponent(videoId),
       API_CONFIG.v1Base + '/videos/' + encodeURIComponent(videoId),
-      API_CONFIG.v1Base + '/videos/' + encodeURIComponent(videoId) + '/status'
+      API_CONFIG.baseUrl + '/agnesapi?video_id=' + encodeURIComponent(videoId) + '&model_name=' + encodeURIComponent(modelName)
     ];
 
     let successRes = null;
@@ -1080,25 +1226,26 @@ function startPolling(videoId){
     }
 
     if(successRes) {
-      const st = successRes.status || successRes.state || '';
+      const st = (successRes.status || successRes.state || '').toLowerCase();
+      const progress = successRes.progress != null ? (successRes.progress + '%') : (attempts * POLL_INTERVAL_SEC + 's');
       if(els.loadingMovieMsg) {
-        els.loadingMovieMsg.textContent = 'État de génération : ' + (st || 'en cours') + ' (tentative ' + attempts + ')';
+        els.loadingMovieMsg.textContent = 'Rendu de la vidéo : ' + (st || 'en cours') + ' (' + progress + ')';
       }
 
-      if(st === 'completed' || st === 'success' || st === 'succeeded' || successRes.video_url || successRes.url) {
-        const url = successRes.video_url || successRes.url || (successRes.metadata && successRes.metadata.url);
+      if(['completed', 'success', 'succeeded', 'done'].includes(st) || successRes.video_url || successRes.url) {
+        const url = successRes.video_url || successRes.url || (successRes.output && successRes.output.url) || (successRes.metadata && successRes.metadata.url);
         if(url) {
           onMovieReady(url);
           return;
         }
-      } else if(st === 'failed' || st === 'error') {
-        throw new Error(successRes.error || 'Échec du calcul sur les serveurs de rendu');
+      } else if(['failed', 'fail', 'error'].includes(st)) {
+        throw new Error(successRes.error || successRes.message || 'Le serveur de rendu vidéo a signalé un échec');
       }
     }
 
     if(attempts >= MAX_POLL_ATTEMPTS) {
       clearInterval(state.pollingInterval);
-      throw new Error('Délai dépassé lors du calcul de la vidéo');
+      throw new Error('Délai d\'attente dépassé (vidéo en file d\'attente prolongée)');
     }
   };
 
@@ -1230,7 +1377,7 @@ function updateApiStatus(status){
   }
 }
 
-function showToast(msg, type='success', duration=2800){
+function showToast(msg, type='success', duration=3200){
   const el = document.getElementById('toast');
   const icon = document.getElementById('toastIcon');
   const text = document.getElementById('toastText');
@@ -1256,7 +1403,6 @@ function sanitizeText(t){
 // JT MULTI-PARTIS (Chatons Shaolin & Wes Anderson)
 // ============================================================
 const SCENE_COUNT = 12;
-const SCENE_DURATION_FRAMES = 145;
 
 const PARTIES = [
  {id:'lfi',name:'La France insoumise',emoji:'🔴',desc:'Mélenchon · Panot',rss:'https://news.google.com/rss/search?q=La+France+insoumise&hl=fr&gl=FR&ceid=FR:fr',chatBreed:'siamois',helmet:'casque de moto rétro rouge',outfit:'kimono de Shaolin rouge corail, ceinture moutarde'},
@@ -1751,40 +1897,65 @@ async function JTgenerateOneScene(scene, idx, script, palette, wid){
     state.videos[idx].progress = 'Rendu vidéo de la scène…';
     JTrenderVideos();
 
-    // 2. Animate into video
+    // 2. Animate into video via /v1/video/generations
     const vidBody = {
-      model: API_CONFIG.modelVideo,
+      model: API_CONFIG.modelVideoDefault,
       prompt: sanitizeText('Subtle cinematic motion, ' + prompt),
-      num_frames: SCENE_DURATION_FRAMES,
-      frame_rate: API_CONFIG.frameRate,
-      image: imgUrl
+      duration: 5,
+      fps: API_CONFIG.frameRate,
+      image: imgUrl,
+      first_frame_image: imgUrl
     };
-    const vidRes = await JTapiFetch(API_CONFIG.v1Base + '/videos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(vidBody)
-    }, 'Worker ' + (wid + 1) + ' Video');
-    const vidData = await vidRes.json();
-    const vidId = vidData.video_id || vidData.id || vidData.task_id;
+
+    let vidData = null;
+    try {
+      const vidRes = await JTapiFetch(API_CONFIG.v1Base + '/video/generations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(vidBody)
+      }, 'Worker ' + (wid + 1) + ' Video');
+      vidData = await vidRes.json();
+    } catch(e) {
+      // Fallback endpoint
+      const vidRes = await JTapiFetch(API_CONFIG.v1Base + '/videos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(vidBody)
+      }, 'Worker ' + (wid + 1) + ' Video Fallback');
+      vidData = await vidRes.json();
+    }
+
+    const vidId = vidData.id || vidData.task_id || vidData.video_id;
     if(!vidId) throw new Error('ID vidéo non fourni');
 
     // 3. Poll for video completion
     let videoUrl = null;
     for(let a = 0; a < 60; a++){
       if(state.stopRequested) return;
-      await JTsleep(8000);
-      state.videos[idx].progress = 'Calcul (' + ((a + 1) * 8) + 's)…';
+      await JTsleep(7000);
+      state.videos[idx].progress = 'Calcul (' + ((a + 1) * 7) + 's)…';
       JTrenderVideos();
 
       try {
-        const pRes = await JTapiFetch(API_CONFIG.baseUrl + API_CONFIG.pollEndpoint + '?video_id=' + encodeURIComponent(vidId) + '&model_name=' + encodeURIComponent(API_CONFIG.modelVideo), { method: 'GET' }, 'Poll');
-        const pData = await pRes.json();
-        const st = pData.status || pData.state || '';
-        if(st === 'completed' || st === 'success' || pData.video_url || pData.url){
-          videoUrl = pData.video_url || pData.url || (pData.metadata && pData.metadata.url);
-          break;
-        } else if(st === 'failed' || st === 'error') {
-          throw new Error('Échec du calcul serveur');
+        let pRes = await fetch(API_CONFIG.v1Base + '/video/generations/' + encodeURIComponent(vidId), {
+          method: 'GET',
+          headers: { 'Authorization': 'Bearer ' + (state.keyPool[wid] ? state.keyPool[wid].key : state.apiKey) }
+        });
+        if(!pRes.ok){
+          pRes = await fetch(API_CONFIG.v1Base + '/videos/' + encodeURIComponent(vidId), {
+            method: 'GET',
+            headers: { 'Authorization': 'Bearer ' + (state.keyPool[wid] ? state.keyPool[wid].key : state.apiKey) }
+          });
+        }
+        if(pRes.ok){
+          const pData = await pRes.json();
+          const st = (pData.status || pData.state || '').toLowerCase();
+          if(['completed', 'success', 'succeeded', 'done'].includes(st) || pData.video_url || pData.url){
+            videoUrl = pData.video_url || pData.url || (pData.output && pData.output.url) || (pData.metadata && pData.metadata.url);
+            break;
+          } else if(['failed', 'fail', 'error'].includes(st)) {
+            throw new Error('Échec du calcul serveur');
+          }
         }
       } catch(e){}
     }
@@ -1941,7 +2112,7 @@ function JTstopFilmPlayback(){
 
 // ======== PWA SERVICE WORKER ========
 const SW_CODE = `
-const CACHE_NAME='movie-v2';
+const CACHE_NAME='movie-v2.5';
 self.addEventListener('install', e => self.skipWaiting());
 self.addEventListener('activate', e => clients.claim());
 self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
