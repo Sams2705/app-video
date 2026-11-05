@@ -259,7 +259,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box
   <div class="file-overlay">
     <div class="upload-area" id="uploadAreaMovie">
       <div class="upload-icon">📷</div>
-      <div class="upload-text">Cliquez ou glissez une image ici (PNG, JPG, WebP — optimisée automatiquement)</div>
+      <div class="upload-text">Cliquez, glissez ou collez (Ctrl + V) votre image ici</div>
       <input type="file" id="imageInputMovie" accept="image/*" class="file-input-hidden">
     </div>
   </div>
@@ -818,6 +818,22 @@ function setupEventListeners(){
     e.preventDefault();
     els.uploadAreaMovie.classList.remove('drag-over');
     if(e.dataTransfer.files.length) handleMovieImage(e.dataTransfer.files[0]);
+  });
+
+  // Support direct Ctrl+V clipboard paste anywhere on the page
+  window.addEventListener('paste', e => {
+    const clipboardData = e.clipboardData || window.clipboardData;
+    if(!clipboardData || !clipboardData.items) return;
+    for(const item of clipboardData.items){
+      if(item.type && item.type.startsWith('image/')){
+        const file = item.getAsFile();
+        if(file){
+          handleMovieImage(file);
+          showToast('Image collée depuis le presse-papier !', 'success');
+          break;
+        }
+      }
+    }
   });
 
   els.promptMovie.addEventListener('input', validateMovieForm);
